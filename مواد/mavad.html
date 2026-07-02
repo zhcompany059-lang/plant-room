@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌱 باغ عجیب - بقا</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #0a0a0a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.5s ease;
+        }
+        body.dead {
+            background-color: #3a0000 !important;
+        }
+
+        .bg-image {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vw;
+            height: 90vh;
+            object-fit: contain;
+            z-index: 0;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            background: #1a1a2e;
+        }
+
+        /* ====== استاتس ====== */
+        .stats-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 15px 20px;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 130px;
+            transition: all 0.3s ease;
+        }
+        .stats-display:hover {
+            transform: scale(1.03);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .stat-item .stat-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: rgba(255,255,255,0.05);
+            padding: 3px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .stat-item .stat-info {
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
+        .stat-item .stat-info .label {
+            font-size: 0.55rem;
+            opacity: 0.5;
+            letter-spacing: 1px;
+        }
+        .stat-item .stat-info .value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        .stat-item .stat-info .value.material-value {
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+        .stat-item .stat-info .value.money-value {
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        .stat-item .stat-info .value.money-value::after {
+            content: ' $';
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+        .stat-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        .upgrade-level {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.3);
+            text-align: center;
+            padding-top: 4px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 4px;
+        }
+        .upgrade-level span {
+            color: #ffd700;
+        }
+
+        /* ====== نوار گرسنگی ====== */
+        .hunger-container {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            max-width: 450px;
+            z-index: 15;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 8px 16px 8px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+        .hunger-container .hunger-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .hunger-container .hunger-bar-bg {
+            flex: 1;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+        .hunger-container .hunger-fill {
+            height: 100%;
+            width: 100%;
+            border-radius: 30px;
+            background: linear-gradient(90deg, #ff4444, #ff8800, #44ff44);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+        .hunger-container .hunger-text {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.7rem;
+            min-width: 35px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* ====== فلوت + مقدار اضافه شده ====== */
+        .hunger-float {
+            position: fixed;
+            z-index: 20;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #44ff44;
+            pointer-events: none;
+            animation: floatUp 1.2s ease-out forwards;
+            text-shadow: 0 0 30px rgba(68, 255, 68, 0.3);
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(0.6); }
+        }
+
+        /* ====== صفحه مرگ ====== */
+        .death-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 0, 0, 0.85);
+            backdrop-filter: blur(16px);
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: deathFade 0.8s ease;
+        }
+        .death-overlay.active {
+            display: flex;
+        }
+        @keyframes deathFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .death-overlay .death-title {
+            font-size: 4rem;
+            color: #ff2222;
+            font-weight: 900;
+            letter-spacing: 8px;
+            text-shadow: 0 0 60px rgba(255, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+        .death-overlay .death-sub {
+            color: rgba(255,255,255,0.4);
+            font-size: 1rem;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+        }
+        .death-overlay .death-stats {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.8;
+        }
+        .death-overlay .death-stats span {
+            color: #ffd700;
+        }
+        .death-overlay .restart-btn {
+            padding: 16px 50px;
+            border-radius: 60px;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff4444, #cc2222);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 40px rgba(255, 68, 68, 0.3);
+            letter-spacing: 2px;
+        }
+        .death-overlay .restart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 60px rgba(255, 68, 68, 0.5);
+        }
+
+        /* ====== دکمه باغ ====== */
+        .bazaar-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 215, 0, 0.85);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #1a1a2e;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+        .bazaar-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 215, 0, 1);
+            box-shadow: 0 8px 40px rgba(255, 215, 0, 0.5);
+        }
+
+        /* ====== ماسک ====== */
+        .blur-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            display: none;
+            pointer-events: none;
+            transition: all 0.4s ease;
+        }
+        .blur-overlay.active {
+            display: block;
+            pointer-events: auto;
+        }
+
+        /* ====== پنل اصلی ====== */
+        .menu-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 90%;
+            max-width: 780px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(16px);
+            border-radius: 30px;
+            padding: 0px;
+            z-index: 60;
+            display: none;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            overflow: hidden;
+            max-height: 90vh;
+        }
+        .menu-panel.active {
+            display: block;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* ====== تب‌ها ====== */
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            background: rgba(0,0,0,0.3);
+            padding: 0 10px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 14px 10px 10px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: rgba(255,255,255,0.3);
+            border-bottom: 2px solid transparent;
+            background: transparent;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            font-family: inherit;
+            min-width: 70px;
+        }
+        .tab-btn:hover {
+            color: rgba(255,255,255,0.6);
+        }
+        .tab-btn.active {
+            color: #fff;
+            border-bottom-color: #ffd700;
+        }
+        .tab-btn.black-tab.active {
+            border-bottom-color: #ff4444;
+            color: #ff4444;
+        }
+        .tab-btn.black-tab:hover {
+            color: #ff6666;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 18px 18px 22px;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ====== تب باغ ====== */
+        .garden-layout {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+        .panel-left {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 120px;
+        }
+        .panel-left .pot-display {
+            width: 160px;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+        .panel-left .pot-display img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .panel-left .pot-display .click-hint {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.6);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.6rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .panel-left .pot-display:hover .click-hint {
+            opacity: 1;
+        }
+        .pot-label {
+            position: absolute;
+            bottom: -25px;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            background: rgba(0,0,0,0.5);
+            padding: 2px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .panel-right {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            min-width: 140px;
+        }
+        .panel-right .title {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 6px;
+            width: 100%;
+            text-align: center;
+        }
+        .plant-cost {
+            background: rgba(255,215,0,0.08);
+            border: 1px dashed rgba(255,215,0,0.2);
+            border-radius: 12px;
+            padding: 6px 14px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+        }
+        .plant-cost span {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        .plant-cost span::after {
+            content: ' $';
+            font-size: 0.8rem;
+        }
+        .action-btn {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 9px 18px;
+            border-radius: 60px;
+            color: #eee;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            font-weight: 500;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .action-btn:hover:not(.disabled) {
+            background: rgba(255, 255, 255, 0.18);
+            transform: scale(1.02);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        .action-btn:active:not(.disabled) {
+            transform: scale(0.97);
+        }
+        .action-btn.disabled {
+            opacity: 0.3;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+        .timer-display {
+            color: #ffd700;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            display: none;
+            width: 100%;
+            text-align: center;
+        }
+        .timer-display.show {
+            display: block;
+        }
+
+        /* ====== تب فروشگاه ====== */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .shop-card {
+            background: rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 14px 14px;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .shop-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,215,0,0.15);
+        }
+        .shop-card .shop-icon {
+            font-size: 2rem;
+            margin-bottom: 2px;
+        }
+        .shop-card .shop-name {
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        .shop-card .shop-desc {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.65rem;
+            margin-bottom: 4px;
+        }
+        .shop-card .shop-level {
+            color: rgba(255,215,0,0.6);
+            font-size: 0.7rem;
+            margin-bottom: 6px;
+        }
+        .shop-card .shop-level span {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        .shop-card .shop-price {
+            color: #00ff88;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .shop-card .shop-price::after {
+            content: ' $';
+        }
+        .shop-card .shop-btn {
+            padding: 7px 16px;
+            border-radius: 30px;
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #1a1a2e;
+            width: 100%;
+        }
+        .shop-card .shop-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+        }
+        .shop-card .shop-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .shop-card .shop-btn.maxed {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.3);
+            cursor: not-allowed;
+        }
+
+        /* ====== تب غذا ====== */
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .food-card {
+            background: rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 14px 12px;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+        }
+        .food-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,215,0,0.15);
+            transform: scale(1.03);
+        }
+        .food-card:active {
+            transform: scale(0.95);
+        }
+        .food-card .food-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .food-card .food-name {
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .food-card .food-desc {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.6rem;
+        }
+        .food-card .food-price {
+            color: #00ff88;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+        .food-card .food-price::after {
+            content: ' $';
+        }
+        .food-card .food-hunger {
+            color: #44ff44;
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+        .food-card .food-hunger::before {
+            content: '❤️ +';
+        }
+
+        /* ====== تب بازار سیاه ====== */
+        .black-content .sell-title {
+            color: #ff4444;
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 4px;
+            text-shadow: 0 0 30px rgba(255,68,68,0.2);
+        }
+        .black-content .sell-subtitle {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+        .sell-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 14px;
+            padding: 10px 16px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .sell-info .label {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.75rem;
+        }
+        .sell-info .value {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        .sell-info .value.materials {
+            color: #ffd700;
+        }
+        .sell-info .value.money {
+            color: #00ff88;
+        }
+        .current-price {
+            background: rgba(255,68,68,0.08);
+            border: 1px dashed rgba(255,68,68,0.2);
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 12px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+        }
+        .current-price span {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .current-price span::after {
+            content: ' $';
+        }
+        .sell-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 10px 0;
+        }
+        .sell-controls .qty-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sell-controls .qty-btn:hover {
+            background: rgba(255,68,68,0.15);
+            border-color: rgba(255,68,68,0.3);
+            transform: scale(1.05);
+        }
+        .sell-controls .qty-display {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: bold;
+            min-width: 45px;
+            text-align: center;
+            color: #ff4444;
+        }
+        .sell-controls .qty-display::after {
+            content: ' عدد';
+            font-size: 0.65rem;
+            opacity: 0.4;
+            font-weight: normal;
+        }
+        .sell-total {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95rem;
+            margin: 8px 0 14px;
+        }
+        .sell-total span {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .sell-total span::after {
+            content: ' $';
+            font-size: 0.8rem;
+        }
+        .sell-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .sell-actions .sell-btn {
+            padding: 10px 28px;
+            border-radius: 60px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+        .sell-actions .sell-btn.sell {
+            background: linear-gradient(135deg, #ff4444, #cc2222);
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(255,68,68,0.3);
+        }
+        .sell-actions .sell-btn.sell:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 8px 40px rgba(255,68,68,0.5);
+        }
+        .sell-actions .sell-btn.sell:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .sell-actions .sell-btn.close {
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .sell-actions .sell-btn.close:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* ====== نوار پیشرفت ====== */
+        .progress-wrapper {
+            position: fixed;
+            bottom: 160px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            max-width: 400px;
+            z-index: 70;
+            display: none;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            padding: 10px 18px;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        }
+        .progress-wrapper.active {
+            display: block;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffd700, #ffaa00, #ff8800);
+            border-radius: 30px;
+            transition: width 0.15s ease;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        .progress-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.65rem;
+            text-align: center;
+            margin-top: 4px;
+            letter-spacing: 2px;
+        }
+
+        /* ====== responsive ====== */
+        @media (max-width: 700px) {
+            .garden-layout {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .panel-left .pot-display {
+                width: 110px;
+                height: 110px;
+            }
+            .panel-right {
+                width: 100%;
+            }
+            .tab-btn {
+                font-size: 0.7rem;
+                padding: 10px 6px;
+                min-width: 50px;
+            }
+            .bazaar-btn {
+                padding: 10px 18px;
+                font-size: 1rem;
+                bottom: 20px;
+                right: 20px;
+            }
+            .progress-wrapper {
+                width: 75%;
+                bottom: 130px;
+            }
+            .bg-image {
+                width: 95vw;
+                height: 85vh;
+            }
+            .stats-display {
+                top: 10px;
+                right: 10px;
+                padding: 10px 12px;
+                min-width: 70px;
+            }
+            .stat-item .stat-icon {
+                width: 22px;
+                height: 22px;
+            }
+            .stat-item .stat-info .value {
+                font-size: 1rem;
+            }
+            .menu-panel {
+                width: 95%;
+                border-radius: 20px;
+                max-height: 95vh;
+            }
+            .tab-content {
+                padding: 12px;
+                max-height: 65vh;
+            }
+            .shop-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .food-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .food-card .food-icon {
+                font-size: 2rem;
+            }
+            .food-card .food-name {
+                font-size: 0.75rem;
+            }
+            .sell-controls .qty-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 1.2rem;
+            }
+            .sell-controls .qty-display {
+                font-size: 1.4rem;
+                min-width: 30px;
+            }
+            .hunger-container {
+                width: 75%;
+                bottom: 80px;
+                padding: 6px 12px 6px 16px;
+            }
+            .hunger-container .hunger-icon {
+                font-size: 1.1rem;
+            }
+            .death-overlay .death-title {
+                font-size: 2.5rem;
+            }
+            .death-overlay .death-sub {
+                font-size: 0.8rem;
+            }
+        }
+        @media (max-width: 450px) {
+            .food-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .shop-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- عکس پس‌زمینه -->
+    <img src="room.png" alt="background" class="bg-image" id="bgImage" />
+
+    <!-- استاتس -->
+    <div class="stats-display" id="statsDisplay">
+        <div class="stat-item">
+            <img src="mavad.png" alt="مواد" class="stat-icon" />
+            <div class="stat-info">
+                <span class="label">🌱 مواد</span>
+                <span class="value material-value" id="materialCount">0</span>
+            </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <img src="pool.png" alt="پول" class="stat-icon" />
+            <div class="stat-info">
+                <span class="label">💰 سرمایه</span>
+                <span class="value money-value" id="moneyCount">20</span>
+            </div>
+        </div>
+        <div class="upgrade-level">
+            🌱 دونه: <span id="seedLevelDisplay">1</span> | 
+            🪴 گلدون: <span id="potLevelDisplay">1</span>
+        </div>
+    </div>
+
+    <!-- نوار گرسنگی -->
+    <div class="hunger-container" id="hungerContainer">
+        <span class="hunger-icon">🍖</span>
+        <div class="hunger-bar-bg">
+            <div class="hunger-fill" id="hungerFill" style="width:100%"></div>
+        </div>
+        <span class="hunger-text" id="hungerText">100</span>
+    </div>
+
+    <!-- دکمه باغ -->
+    <button class="bazaar-btn" id="bazaarBtn">🌱 باغ</button>
+
+    <!-- ماسک -->
+    <div class="blur-overlay" id="blurOverlay"></div>
+
+    <!-- ====== پنل اصلی ====== -->
+    <div class="menu-panel" id="menuPanel">
+        <!-- تب‌ها -->
+        <div class="tab-header">
+            <button class="tab-btn active" data-tab="garden">🌱 باغ</button>
+            <button class="tab-btn" data-tab="shop">🏪 فروشگاه</button>
+            <button class="tab-btn" data-tab="food">🍽️ غذا</button>
+            <button class="tab-btn black-tab" data-tab="black">🖤 بازار</button>
+        </div>
+
+        <!-- تب باغ -->
+        <div class="tab-content active" id="tabGarden">
+            <div class="garden-layout">
+                <div class="panel-left">
+                    <div class="pot-display" id="potDisplay">
+                        <img src="goldon.png" alt="گلدون" id="potImage" />
+                        <span class="click-hint">✨ کلیک کن!</span>
+                        <span class="pot-label" id="potLabel">goldon.png</span>
+                    </div>
+                </div>
+                <div class="panel-right">
+                    <div class="title">🌱 مزرعه عجیب</div>
+                    <div class="plant-cost">💰 هزینه دونه: <span id="costDisplay">5</span></div>
+                    <button class="action-btn" id="plantBtn">🌰 کاشت دونه</button>
+                    <button class="action-btn disabled" id="waterBtn">💧 آب دهی</button>
+                    <div class="timer-display" id="timerDisplay">⏳ ۳۰ ثانیه صبر کن...</div>
+                    <button class="action-btn disabled" id="harvestBtn" style="display:none;">🎁 دریافت مواد</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- تب فروشگاه -->
+        <div class="tab-content" id="tabShop">
+            <div style="text-align:center; margin-bottom:10px;">
+                <span style="color:rgba(255,255,255,0.5); font-size:0.8rem; letter-spacing:2px;">🏪 ارتقا دهید و قدرتمندتر شوید</span>
+            </div>
+            <div class="shop-grid">
+                <div class="shop-card" id="seedShopCard">
+                    <div class="shop-icon">🌰</div>
+                    <div class="shop-name">ارتقا دونه</div>
+                    <div class="shop-desc">+۱ مواد در هر برداشت</div>
+                    <div class="shop-level">سطح: <span id="seedShopLevel">1</span>/3</div>
+                    <div class="shop-price" id="seedShopPrice">20</div>
+                    <button class="shop-btn" id="seedShopBtn">🔧 ارتقا</button>
+                </div>
+                <div class="shop-card" id="potShopCard">
+                    <div class="shop-icon">🪴</div>
+                    <div class="shop-name">ارتقا گلدون</div>
+                    <div class="shop-desc">کاهش ۵ ثانیه زمان رشد</div>
+                    <div class="shop-level">سطح: <span id="potShopLevel">1</span>/3</div>
+                    <div class="shop-price" id="potShopPrice">20</div>
+                    <button class="shop-btn" id="potShopBtn">🔧 ارتقا</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- تب غذا -->
+        <div class="tab-content" id="tabFood">
+            <div style="text-align:center; margin-bottom:8px;">
+                <span style="color:rgba(255,255,255,0.5); font-size:0.8rem; letter-spacing:2px;">🍽️ گرسنگی خود را رفع کنید</span>
+            </div>
+            <div class="food-grid">
+                <div class="food-card" data-food="sandwich">
+                    <span class="food-icon">🥪</span>
+                    <div class="food-name">ساندویچ</div>
+                    <div class="food-desc">+۱۰ گرسنگی</div>
+                    <div class="food-price">15</div>
+                    <div class="food-hunger">10</div>
+                </div>
+                <div class="food-card" data-food="banana">
+                    <span class="food-icon">🍌</span>
+                    <div class="food-name">موز</div>
+                    <div class="food-desc">+۵ گرسنگی</div>
+                    <div class="food-price">8</div>
+                    <div class="food-hunger">5</div>
+                </div>
+                <div class="food-card" data-food="coffee">
+                    <span class="food-icon">☕</span>
+                    <div class="food-name">قهوه</div>
+                    <div class="food-desc">+۲ گرسنگی</div>
+                    <div class="food-price">4</div>
+                    <div class="food-hunger">2</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- تب بازار سیاه -->
+        <div class="tab-content black-content" id="tabBlack">
+            <div class="sell-title">🖤 بازار سیاه</div>
+            <div class="sell-subtitle">مواد خود را با قیمت لحظه‌ای بفروشید</div>
+            <div class="sell-info">
+                <span class="label">📦 مواد موجود</span>
+                <span class="value materials" id="sellMaterials">0</span>
+            </div>
+            <div class="sell-info">
+                <span class="label">💵 سرمایه شما</span>
+                <span class="value money" id="sellMoney">20 $</span>
+            </div>
+            <div class="current-price">💰 قیمت هر مواد: <span id="currentPrice">10</span> دلار</div>
+            <div class="sell-controls">
+                <button class="qty-btn" id="sellQtyMinus">−</button>
+                <span class="qty-display" id="sellQtyDisplay">1</span>
+                <button class="qty-btn" id="sellQtyPlus">+</button>
+            </div>
+            <div class="sell-total">مبلغ قابل دریافت: <span id="sellTotal">10</span></div>
+            <div class="sell-actions">
+                <button class="sell-btn sell" id="sellConfirmBtn">💰 بفروش</button>
+                <button class="sell-btn close" id="sellCloseBtn">✕ بستن</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نوار پیشرفت -->
+    <div class="progress-wrapper" id="progressWrapper">
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-label">🖱️ روی عکس یا نوار کلیک کن تا پر بشه</div>
+    </div>
+
+    <!-- صفحه مرگ -->
+    <div class="death-overlay" id="deathOverlay">
+        <div class="death-title">💀 شما مردید!</div>
+        <div class="death-sub">گرسنگی شما به صفر رسید...</div>
+        <div class="death-stats" id="deathStats">
+            📦 مواد جمع‌آوری شده: <span id="deathMaterials">0</span><br />
+            💰 پول جمع‌آوری شده: <span id="deathMoney">0</span> $
+        </div>
+        <button class="restart-btn" id="restartBtn">🔄 بازی مجدد</button>
+    </div>
+
+    <script>
+        (function() {
+            // ========== عناصر ==========
+            const bgImage = document.getElementById('bgImage');
+            const bazaarBtn = document.getElementById('bazaarBtn');
+            const blurOverlay = document.getElementById('blurOverlay');
+            const menuPanel = document.getElementById('menuPanel');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabGarden = document.getElementById('tabGarden');
+            const tabShop = document.getElementById('tabShop');
+            const tabFood = document.getElementById('tabFood');
+            const tabBlack = document.getElementById('tabBlack');
+            
+            const potImage = document.getElementById('potImage');
+            const potLabel = document.getElementById('potLabel');
+            const potDisplay = document.getElementById('potDisplay');
+            const plantBtn = document.getElementById('plantBtn');
+            const waterBtn = document.getElementById('waterBtn');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const harvestBtn = document.getElementById('harvestBtn');
+            const progressWrapper = document.getElementById('progressWrapper');
+            const progressFill = document.getElementById('progressFill');
+            const progressBar = document.getElementById('progressBar');
+            
+            const materialCount = document.getElementById('materialCount');
+            const moneyCount = document.getElementById('moneyCount');
+            const costDisplay = document.getElementById('costDisplay');
+            const seedLevelDisplay = document.getElementById('seedLevelDisplay');
+            const potLevelDisplay = document.getElementById('potLevelDisplay');
+            
+            const sellMaterials = document.getElementById('sellMaterials');
+            const sellMoney = document.getElementById('sellMoney');
+            const currentPrice = document.getElementById('currentPrice');
+            const sellQtyDisplay = document.getElementById('sellQtyDisplay');
+            const sellTotal = document.getElementById('sellTotal');
+            const sellConfirmBtn = document.getElementById('sellConfirmBtn');
+            const sellCloseBtn = document.getElementById('sellCloseBtn');
+            const sellQtyMinus = document.getElementById('sellQtyMinus');
+            const sellQtyPlus = document.getElementById('sellQtyPlus');
+
+            // عناصر گرسنگی
+            const hungerFill = document.getElementById('hungerFill');
+            const hungerText = document.getElementById('hungerText');
+            const hungerContainer = document.getElementById('hungerContainer');
+
+            // عناصر فروشگاه
+            const seedShopLevel = document.getElementById('seedShopLevel');
+            const potShopLevel = document.getElementById('potShopLevel');
+            const seedShopPrice = document.getElementById('seedShopPrice');
+            const potShopPrice = document.getElementById('potShopPrice');
+            const seedShopBtn = document.getElementById('seedShopBtn');
+            const potShopBtn = document.getElementById('potShopBtn');
+
+            // عناصر مرگ
+            const deathOverlay = document.getElementById('deathOverlay');
+            const deathMaterials = document.getElementById('deathMaterials');
+            const deathMoney = document.getElementById('deathMoney');
+            const restartBtn = document.getElementById('restartBtn');
+
+            // ========== وضعیت ==========
+            const SEED_COST = 5;
+
+            let state = {
+                menuOpen: false,
+                seedPlanted: false,
+                watered: false,
+                grown: false,
+                harvested: false,
+                timerRunning: false,
+                clickCount: 0,
+                maxClicks: 10,
+                progressComplete: false,
+                timerInterval: null,
+                countdown: 30,
+                currentPhase: 'goldon',
+                materials: 0,
+                money: 20,
+                sellQty: 1,
+                currentPrice: 10,
+                priceMin: 8,
+                priceMax: 17,
+                currentTab: 'garden',
+
+                seedLevel: 1,
+                potLevel: 1,
+                seedUpgradeCost: 20,
+                potUpgradeCost: 20,
+
+                // گرسنگی
+                hunger: 100,
+                maxHunger: 100,
+                isDead: false,
+                totalMaterials: 0,
+                totalMoney: 0,
+                hungerInterval: null
+            };
+
+            // ========== توابع قیمت ==========
+            function generateNewPrice() {
+                const change = (Math.random() - 0.5) * 4;
+                let newPrice = state.currentPrice + change;
+                newPrice = Math.round(Math.max(state.priceMin, Math.min(state.priceMax, newPrice)));
+                return newPrice;
+            }
+
+            function updatePrice() {
+                state.currentPrice = generateNewPrice();
+                currentPrice.textContent = state.currentPrice;
+                updateSellTotal();
+            }
+
+            // ========== گرسنگی ==========
+            function updateHungerUI() {
+                const percent = (state.hunger / state.maxHunger) * 100;
+                hungerFill.style.width = percent + '%';
+                hungerText.textContent = Math.round(state.hunger);
+
+                // تغییر رنگ نوار
+                if (percent > 60) {
+                    hungerFill.style.background = 'linear-gradient(90deg, #44ff44, #88ff44)';
+                } else if (percent > 30) {
+                    hungerFill.style.background = 'linear-gradient(90deg, #ff8800, #ffaa00)';
+                } else {
+                    hungerFill.style.background = 'linear-gradient(90deg, #ff4444, #ff2222)';
+                    hungerFill.style.boxShadow = '0 0 30px rgba(255, 0, 0, 0.3)';
+                }
+
+                // اگر گرسنگی به صفر رسید
+                if (state.hunger <= 0 && !state.isDead) {
+                    state.hunger = 0;
+                    die();
+                }
+            }
+
+            function showHungerFloat(amount) {
+                const float = document.createElement('div');
+                float.className = 'hunger-float';
+                float.textContent = '+' + amount;
+                float.style.left = '50%';
+                float.style.top = '55%';
+                float.style.transform = 'translateX(-50%)';
+                document.body.appendChild(float);
+                setTimeout(() => { float.remove(); }, 1200);
+            }
+
+            function startHungerTimer() {
+                if (state.hungerInterval) clearInterval(state.hungerInterval);
+                state.hungerInterval = setInterval(() => {
+                    if (!state.isDead) {
+                        state.hunger = Math.max(0, state.hunger - 0.3);
+                        updateHungerUI();
+                    }
+                }, 1000);
+            }
+
+            function addHunger(amount) {
+                if (state.isDead) return;
+                const oldHunger = state.hunger;
+                state.hunger = Math.min(state.maxHunger, state.hunger + amount);
+                const added = state.hunger - oldHunger;
+                if (added > 0) {
+                    showHungerFloat(added);
+                }
+                updateHungerUI();
+            }
+
+            // ========== مرگ ==========
+            function die() {
+                if (state.isDead) return;
+                state.isDead = true;
+                if (state.hungerInterval) {
+                    clearInterval(state.hungerInterval);
+                    state.hungerInterval = null;
+                }
+                if (state.timerInterval) {
+                    clearInterval(state.timerInterval);
+                    state.timerInterval = null;
+                }
+                deathMaterials.textContent = state.totalMaterials;
+                deathMoney.textContent = state.totalMoney;
+                deathOverlay.classList.add('active');
+                document.body.classList.add('dead');
+            }
+
+            function restartGame() {
+                // ریست کامل
+                state.isDead = false;
+                state.materials = 0;
+                state.money = 20;
+                state.hunger = 100;
+                state.totalMaterials = 0;
+                state.totalMoney = 0;
+                state.seedLevel = 1;
+                state.potLevel = 1;
+                state.seedUpgradeCost = 20;
+                state.potUpgradeCost = 20;
+                state.seedPlanted = false;
+                state.watered = false;
+                state.grown = false;
+                state.harvested = false;
+                state.clickCount = 0;
+                state.progressComplete = false;
+                state.currentPhase = 'goldon';
+                state.currentPrice = 10;
+
+                document.body.classList.remove('dead');
+                deathOverlay.classList.remove('active');
+                
+                resetAll();
+                setPotPhase('goldon');
+                updatePrice();
+                updateUI();
+                updateHungerUI();
+                startHungerTimer();
+
+                if (state.menuOpen) toggleMenu(false);
+            }
+
+            // ========== به‌روزرسانی UI ==========
+            function updateUI() {
+                materialCount.textContent = state.materials;
+                moneyCount.textContent = state.money;
+                sellMaterials.textContent = state.materials;
+                sellMoney.textContent = state.money + ' $';
+                costDisplay.textContent = SEED_COST;
+                
+                seedLevelDisplay.textContent = state.seedLevel;
+                potLevelDisplay.textContent = state.potLevel;
+                seedShopLevel.textContent = state.seedLevel;
+                potShopLevel.textContent = state.potLevel;
+                seedShopPrice.textContent = state.seedUpgradeCost;
+                potShopPrice.textContent = state.potUpgradeCost;
+
+                updateShopButtons();
+                updateSellTotal();
+                updatePlantButton();
+
+                materialCount.style.transform = 'scale(1.3)';
+                setTimeout(() => { materialCount.style.transform = 'scale(1)'; }, 200);
+                moneyCount.style.transform = 'scale(1.3)';
+                setTimeout(() => { moneyCount.style.transform = 'scale(1)'; }, 200);
+            }
+
+            function updateSellTotal() {
+                const total = state.sellQty * state.currentPrice;
+                sellTotal.textContent = total;
+                sellConfirmBtn.disabled = (state.sellQty > state.materials || state.sellQty <= 0 || state.materials === 0);
+            }
+
+            function updatePlantButton() {
+                if (state.isDead) {
+                    plantBtn.classList.add('disabled');
+                    plantBtn.textContent = '💀 شما مردید!';
+                    return;
+                }
+                if (state.money < SEED_COST) {
+                    plantBtn.classList.add('disabled');
+                    plantBtn.textContent = '💰 پول کافی نیست!';
+                } else if (state.seedPlanted || state.grown) {
+                    plantBtn.classList.add('disabled');
+                    plantBtn.textContent = '🌱 در حال رشد...';
+                } else {
+                    plantBtn.classList.remove('disabled');
+                    plantBtn.textContent = '🌰 کاشت دونه';
+                }
+            }
+
+            function updateShopButtons() {
+                if (state.isDead) {
+                    seedShopBtn.disabled = true;
+                    seedShopBtn.textContent = '💀';
+                    potShopBtn.disabled = true;
+                    potShopBtn.textContent = '💀';
+                    return;
+                }
+                if (state.seedLevel >= 3) {
+                    seedShopBtn.textContent = '✅ ماکس';
+                    seedShopBtn.className = 'shop-btn maxed';
+                    seedShopBtn.disabled = true;
+                } else if (state.money < state.seedUpgradeCost) {
+                    seedShopBtn.textContent = '💰 پول کم';
+                    seedShopBtn.disabled = true;
+                    seedShopBtn.className = 'shop-btn';
+                } else {
+                    seedShopBtn.textContent = '🔧 ارتقا';
+                    seedShopBtn.disabled = false;
+                    seedShopBtn.className = 'shop-btn';
+                }
+
+                if (state.potLevel >= 3) {
+                    potShopBtn.textContent = '✅ ماکس';
+                    potShopBtn.className = 'shop-btn maxed';
+                    potShopBtn.disabled = true;
+                } else if (state.money < state.potUpgradeCost) {
+                    potShopBtn.textContent = '💰 پول کم';
+                    potShopBtn.disabled = true;
+                    potShopBtn.className = 'shop-btn';
+                } else {
+                    potShopBtn.textContent = '🔧 ارتقا';
+                    potShopBtn.disabled = false;
+                    potShopBtn.className = 'shop-btn';
+                }
+            }
+
+            // ========== تنظیم گلدون ==========
+            function setPotPhase(phase) {
+                state.currentPhase = phase;
+                switch(phase) {
+                    case 'goldon':
+                        potImage.src = 'goldon.png';
+                        potLabel.textContent = 'goldon.png';
+                        potDisplay.style.borderColor = 'rgba(255,215,0,0.2)';
+                        break;
+                    case 'gl_v_goldon':
+                        potImage.src = 'gl_v_goldon.png';
+                        potLabel.textContent = 'gl_v_goldon.png';
+                        potDisplay.style.borderColor = 'rgba(100,255,100,0.3)';
+                        break;
+                    case 'mavad':
+                        potImage.src = 'mavad.png';
+                        potLabel.textContent = 'mavad.png';
+                        potDisplay.style.borderColor = 'rgba(255,100,255,0.3)';
+                        break;
+                    default:
+                        potImage.src = 'goldon.png';
+                        potLabel.textContent = 'goldon.png';
+                }
+                potDisplay.style.transform = 'scale(0.9)';
+                setTimeout(() => { potDisplay.style.transform = 'scale(1)'; }, 300);
+            }
+
+            // ========== جلوه کلیک ==========
+            function potClickEffect(e) {
+                if (state.isDead) return;
+                potDisplay.style.transform = 'scale(1.15) rotate(3deg)';
+                potDisplay.style.transition = 'all 0.1s ease';
+                setTimeout(() => {
+                    potDisplay.style.transform = 'scale(0.95) rotate(-2deg)';
+                }, 150);
+                setTimeout(() => {
+                    potDisplay.style.transform = 'scale(1) rotate(0deg)';
+                }, 300);
+                potDisplay.style.boxShadow = '0 0 60px rgba(255,215,0,0.5)';
+                setTimeout(() => {
+                    potDisplay.style.boxShadow = 'none';
+                }, 400);
+
+                const ePos = e || window.event;
+                for(let i = 0; i < 5; i++) {
+                    const particle = document.createElement('div');
+                    particle.style.cssText = `
+                        position: fixed;
+                        width: 8px;
+                        height: 8px;
+                        background: rgba(255,215,0,${0.3 + Math.random() * 0.5});
+                        border-radius: 50%;
+                        pointer-events: none;
+                        z-index: 200;
+                        left: ${(ePos.clientX || window.innerWidth/2) + (Math.random() - 0.5) * 60}px;
+                        top: ${(ePos.clientY || window.innerHeight/2) + (Math.random() - 0.5) * 60}px;
+                        transition: all 0.6s ease-out;
+                    `;
+                    document.body.appendChild(particle);
+                    setTimeout(() => {
+                        particle.style.transform = `translate(${(Math.random() - 0.5) * 100}px, ${-50 - Math.random() * 80}px) scale(0)`;
+                        particle.style.opacity = '0';
+                    }, 10);
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 700);
+                }
+            }
+
+            // ========== ریست کامل ==========
+            function resetAll() {
+                state.seedPlanted = false;
+                state.watered = false;
+                state.grown = false;
+                state.harvested = false;
+                state.timerRunning = false;
+                state.clickCount = 0;
+                state.progressComplete = false;
+                state.countdown = 30;
+                
+                progressFill.style.width = '0%';
+                progressWrapper.classList.remove('active');
+                
+                setPotPhase('goldon');
+                
+                plantBtn.classList.remove('disabled');
+                waterBtn.classList.add('disabled');
+                harvestBtn.style.display = 'none';
+                harvestBtn.classList.add('disabled');
+                timerDisplay.classList.remove('show');
+                
+                if (state.timerInterval) {
+                    clearInterval(state.timerInterval);
+                    state.timerInterval = null;
+                }
+                
+                updateUI();
+                updatePlantButton();
+            }
+
+            // ========== محاسبات ==========
+            function getGrowTime() {
+                let time = 30 - (state.potLevel - 1) * 5;
+                return Math.max(time, 15);
+            }
+
+            function getHarvestBonus() {
+                return state.seedLevel - 1;
+            }
+
+            // ========== پیشرفت کلیک ==========
+            function handleClickProgress(e) {
+                if (state.isDead) return;
+                if (!state.grown || state.progressComplete || state.harvested) return;
+
+                if (e && e.target && e.target.closest('.pot-display')) {
+                    potClickEffect(e);
+                }
+
+                state.clickCount = Math.min(state.clickCount + 1, state.maxClicks);
+                const fillPercent = (state.clickCount / state.maxClicks) * 100;
+                progressFill.style.width = fillPercent + '%';
+
+                if (fillPercent > 70) {
+                    progressFill.style.background = 'linear-gradient(90deg, #ff8800, #ff4400)';
+                } else if (fillPercent > 40) {
+                    progressFill.style.background = 'linear-gradient(90deg, #ffd700, #ffaa00)';
+                }
+
+                if (state.clickCount >= state.maxClicks) {
+                    state.progressComplete = true;
+                    state.harvested = true;
+                    progressWrapper.classList.remove('active');
+
+                    const harvestAmount = 1 + getHarvestBonus();
+                    state.materials += harvestAmount;
+                    state.totalMaterials += harvestAmount;
+                    updateUI();
+                    updatePrice();
+
+                    setPotPhase('mavad');
+                    potDisplay.style.transform = 'scale(1.3) rotate(10deg)';
+                    setTimeout(() => {
+                        potDisplay.style.transform = 'scale(1) rotate(0deg)';
+                    }, 600);
+
+                    for(let i = 0; i < 15; i++) {
+                        setTimeout(() => {
+                            const particle = document.createElement('div');
+                            const size = 6 + Math.random() * 12;
+                            const colors = ['#ffd700', '#ffaa00', '#ff8800', '#ffcc44'];
+                            particle.style.cssText = `
+                                position: fixed;
+                                width: ${size}px;
+                                height: ${size}px;
+                                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                                border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+                                pointer-events: none;
+                                z-index: 200;
+                                left: ${window.innerWidth/2 + (Math.random() - 0.5) * 200}px;
+                                top: ${window.innerHeight/2 + (Math.random() - 0.5) * 200}px;
+                                transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+                                box-shadow: 0 0 20px rgba(255,215,0,0.5);
+                            `;
+                            document.body.appendChild(particle);
+                            setTimeout(() => {
+                                particle.style.transform = `translate(${(Math.random() - 0.5) * 400}px, ${-200 - Math.random() * 300}px) scale(0)`;
+                                particle.style.opacity = '0';
+                            }, 10);
+                            setTimeout(() => {
+                                particle.remove();
+                            }, 1200);
+                        }, i * 80);
+                    }
+
+                    harvestBtn.textContent = `✅ +${harvestAmount} مواد!`;
+                    harvestBtn.classList.remove('disabled');
+                    harvestBtn.style.background = 'rgba(255,215,0,0.3)';
+                    harvestBtn.style.borderColor = '#ffd700';
+
+                    // اضافه کردن گرسنگی بعد از برداشت (کمی)
+                    addHunger(2);
+
+                    setTimeout(() => {
+                        resetAll();
+                        setPotPhase('goldon');
+                        updateUI();
+                    }, 2500);
+                }
+            }
+
+            // ========== مدیریت تب‌ها ==========
+            function switchTab(tabName) {
+                document.querySelectorAll('.tab-content').forEach(el => {
+                    el.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-btn').forEach(el => {
+                    el.classList.remove('active');
+                });
+
+                if (tabName === 'garden') {
+                    tabGarden.classList.add('active');
+                    document.querySelector('.tab-btn[data-tab="garden"]').classList.add('active');
+                    state.currentTab = 'garden';
+                    if (state.grown && !state.progressComplete && !state.isDead) {
+                        progressWrapper.classList.add('active');
+                    }
+                } else if (tabName === 'shop') {
+                    tabShop.classList.add('active');
+                    document.querySelector('.tab-btn[data-tab="shop"]').classList.add('active');
+                    state.currentTab = 'shop';
+                    progressWrapper.classList.remove('active');
+                    updateUI();
+                } else if (tabName === 'food') {
+                    tabFood.classList.add('active');
+                    document.querySelector('.tab-btn[data-tab="food"]').classList.add('active');
+                    state.currentTab = 'food';
+                    progressWrapper.classList.remove('active');
+                } else if (tabName === 'black') {
+                    tabBlack.classList.add('active');
+                    document.querySelector('.tab-btn[data-tab="black"]').classList.add('active');
+                    state.currentTab = 'black';
+                    progressWrapper.classList.remove('active');
+                    updateUI();
+                }
+            }
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tab = this.dataset.tab;
+                    if (tab === state.currentTab) return;
+                    switchTab(tab);
+                });
+            });
+
+            // ========== باز/بستن منو ==========
+            function toggleMenu(open) {
+                if (open) {
+                    if (state.isDead) return;
+                    blurOverlay.classList.add('active');
+                    menuPanel.classList.add('active');
+                    state.menuOpen = true;
+                    switchTab(state.currentTab);
+                    if (state.currentTab === 'garden' && state.grown && !state.progressComplete && !state.isDead) {
+                        progressWrapper.classList.add('active');
+                    }
+                    updateUI();
+                } else {
+                    blurOverlay.classList.remove('active');
+                    menuPanel.classList.remove('active');
+                    state.menuOpen = false;
+                    progressWrapper.classList.remove('active');
+                }
+            }
+
+            bazaarBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (state.isDead) return;
+                toggleMenu(!state.menuOpen);
+            });
+
+            blurOverlay.addEventListener('click', function() {
+                if (state.menuOpen) toggleMenu(false);
+            });
+
+            // ========== کاشت ==========
+            plantBtn.addEventListener('click', function() {
+                if (state.isDead) return;
+                if (state.seedPlanted || state.grown) return;
+                if (state.money < SEED_COST) {
+                    alert('💰 پول کافی برای کاشت ندارید!');
+                    return;
+                }
+
+                state.money -= SEED_COST;
+                state.totalMoney += SEED_COST;
+                state.seedPlanted = true;
+                plantBtn.classList.add('disabled');
+                waterBtn.classList.remove('disabled');
+                setPotPhase('goldon');
+                updateUI();
+
+                potDisplay.style.boxShadow = '0 0 40px rgba(255,215,0,0.3)';
+                setTimeout(() => {
+                    potDisplay.style.boxShadow = 'none';
+                }, 600);
+
+                updatePlantButton();
+            });
+
+            // ========== آب دهی ==========
+            waterBtn.addEventListener('click', function() {
+                if (state.isDead) return;
+                if (state.watered || !state.seedPlanted || state.grown) return;
+                state.watered = true;
+                waterBtn.classList.add('disabled');
+
+                potDisplay.style.boxShadow = '0 0 50px rgba(100, 200, 255, 0.6)';
+                potDisplay.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    potDisplay.style.boxShadow = 'none';
+                    potDisplay.style.transform = 'scale(1)';
+                }, 800);
+
+                const growTime = getGrowTime();
+                timerDisplay.classList.add('show');
+                timerDisplay.textContent = `⏳ ${growTime} ثانیه صبر کن...`;
+                state.countdown = growTime;
+                state.timerRunning = true;
+
+                if (state.timerInterval) clearInterval(state.timerInterval);
+                state.timerInterval = setInterval(() => {
+                    state.countdown--;
+                    timerDisplay.textContent = `⏳ ${state.countdown} ثانیه صبر کن...`;
+                    if (state.countdown <= 0) {
+                        clearInterval(state.timerInterval);
+                        state.timerInterval = null;
+                        state.timerRunning = false;
+                        timerDisplay.classList.remove('show');
+                        state.grown = true;
+                        setPotPhase('gl_v_goldon');
+
+                        progressWrapper.classList.add('active');
+                        state.clickCount = 0;
+                        progressFill.style.width = '0%';
+                        progressFill.style.background = 'linear-gradient(90deg, #ffd700, #ffaa00, #ff8800)';
+                        state.progressComplete = false;
+
+                        harvestBtn.style.display = 'block';
+                        harvestBtn.classList.add('disabled');
+                        harvestBtn.textContent = '🎁 دریافت مواد';
+                    }
+                }, 1000);
+            });
+
+            // ========== کلیک روی نوار پیشرفت ==========
+            progressBar.addEventListener('click', function(e) {
+                handleClickProgress(e);
+            });
+
+            // ========== کلیک روی گلدون ==========
+            potDisplay.addEventListener('click', function(e) {
+                handleClickProgress(e);
+            });
+
+            // ========== فروش - کنترل تعداد ==========
+            sellQtyMinus.addEventListener('click', function() {
+                if (state.sellQty > 1) {
+                    state.sellQty--;
+                    sellQtyDisplay.textContent = state.sellQty;
+                    updateSellTotal();
+                }
+            });
+
+            sellQtyPlus.addEventListener('click', function() {
+                if (state.sellQty < state.materials) {
+                    state.sellQty++;
+                    sellQtyDisplay.textContent = state.sellQty;
+                    updateSellTotal();
+                }
+            });
+
+            // ========== فروش - تایید ==========
+            sellConfirmBtn.addEventListener('click', function() {
+                if (state.isDead) return;
+                if (state.sellQty <= 0 || state.sellQty > state.materials) return;
+
+                const total = state.sellQty * state.currentPrice;
+                state.materials -= state.sellQty;
+                state.money += total;
+                state.totalMoney += total;
+                state.sellQty = 1;
+                sellQtyDisplay.textContent = '1';
+                
+                updatePrice();
+                updateUI();
+
+                const statsDisplay = document.getElementById('statsDisplay');
+                statsDisplay.style.transform = 'scale(1.05)';
+                statsDisplay.style.borderColor = 'rgba(0,255,100,0.4)';
+                setTimeout(() => {
+                    statsDisplay.style.transform = 'scale(1)';
+                    statsDisplay.style.borderColor = 'rgba(255,215,0,0.15)';
+                }, 400);
+
+                sellConfirmBtn.textContent = '✅ فروخته شد!';
+                sellConfirmBtn.style.background = 'rgba(0,255,100,0.2)';
+                setTimeout(() => {
+                    sellConfirmBtn.textContent = '💰 بفروش';
+                    sellConfirmBtn.style.background = '';
+                }, 1500);
+
+                // اضافه کردن گرسنگی بعد از فروش (کمی)
+                addHunger(1);
+
+                if (state.materials === 0) {
+                    switchTab('garden');
+                }
+            });
+
+            sellCloseBtn.addEventListener('click', function() {
+                switchTab('garden');
+            });
+
+            // ========== خرید غذا ==========
+            document.querySelectorAll('.food-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    if (state.isDead) return;
+                    const food = this.dataset.food;
+                    let price, hungerAdd;
+                    switch(food) {
+                        case 'sandwich':
+                            price = 15;
+                            hungerAdd = 10;
+                            break;
+                        case 'banana':
+                            price = 8;
+                            hungerAdd = 5;
+                            break;
+                        case 'coffee':
+                            price = 4;
+                            hungerAdd = 2;
+                            break;
+                        default: return;
+                    }
+
+                    if (state.money < price) {
+                        alert(`💰 پول کافی برای خرید ${this.querySelector('.food-name').textContent} ندارید!`);
+                        return;
+                    }
+
+                    if (state.hunger >= state.maxHunger) {
+                        alert('🍖 گرسنگی شما کاملاً پر است!');
+                        return;
+                    }
+
+                    state.money -= price;
+                    addHunger(hungerAdd);
+                    updateUI();
+
+                    // انیمیشن خرید
+                    this.style.borderColor = 'rgba(68, 255, 68, 0.4)';
+                    this.style.background = 'rgba(68, 255, 68, 0.1)';
+                    setTimeout(() => {
+                        this.style.borderColor = 'rgba(255,255,255,0.06)';
+                        this.style.background = 'rgba(255,255,255,0.04)';
+                    }, 600);
+
+                    // بستن منو بعد از خرید
+                    setTimeout(() => {
+                        toggleMenu(false);
+                    }, 300);
+                });
+            });
+
+            // ========== ارتقا دونه ==========
+            seedShopBtn.addEventListener('click', function() {
+                if (state.isDead) return;
+                if (state.seedLevel >= 3) return;
+                if (state.money < state.seedUpgradeCost) {
+                    alert('💰 پول کافی برای ارتقا ندارید!');
+                    return;
+                }
+
+                state.money -= state.seedUpgradeCost;
+                state.seedLevel++;
+                state.seedUpgradeCost = Math.floor(state.seedUpgradeCost * 1.8);
+                updateUI();
+                
+                seedShopBtn.textContent = '✅ ارتقا یافت!';
+                seedShopBtn.style.background = 'rgba(0,255,100,0.2)';
+                setTimeout(() => {
+                    seedShopBtn.textContent = '🔧 ارتقا';
+                    seedShopBtn.style.background = '';
+                    updateUI();
+                }, 1000);
+
+                alert(`🌰 ارتقا دونه به سطح ${state.seedLevel}!\nهر برداشت +${state.seedLevel - 1} مواد اضافه!`);
+            });
+
+            // ========== ارتقا گلدون ==========
+            potShopBtn.addEventListener('click', function() {
+                if (state.isDead) return;
+                if (state.potLevel >= 3) return;
+                if (state.money < state.potUpgradeCost) {
+                    alert('💰 پول کافی برای ارتقا ندارید!');
+                    return;
+                }
+
+                state.money -= state.potUpgradeCost;
+                state.potLevel++;
+                state.potUpgradeCost = Math.floor(state.potUpgradeCost * 1.8);
+                updateUI();
+                
+                potShopBtn.textContent = '✅ ارتقا یافت!';
+                potShopBtn.style.background = 'rgba(0,255,100,0.2)';
+                setTimeout(() => {
+                    potShopBtn.textContent = '🔧 ارتقا';
+                    potShopBtn.style.background = '';
+                    updateUI();
+                }, 1000);
+
+                alert(`🪴 ارتقا گلدون به سطح ${state.potLevel}!\nزمان رشد ${getGrowTime()} ثانیه شد!`);
+            });
+
+            // ========== ریستارت ==========
+            restartBtn.addEventListener('click', function() {
+                restartGame();
+            });
+
+            // جلوگیری از بسته شدن با کلیک داخل پنل
+            menuPanel.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // ========== مقداردهی اولیه ==========
+            resetAll();
+            setPotPhase('goldon');
+            state.money = 20;
+            state.currentPrice = 10;
+            state.currentTab = 'garden';
+            state.hunger = 100;
+            state.isDead = false;
+            updatePrice();
+            updateUI();
+            updateHungerUI();
+            startHungerTimer();
+
+            // خطاگیری عکس‌ها
+            bgImage.onerror = function() {
+                this.style.display = 'none';
+                document.querySelector('.bg-image').style.background = 'linear-gradient(145deg, #1a2a3a, #0d1b2a)';
+            };
+
+            potImage.onerror = function() {
+                this.style.display = 'none';
+                this.parentElement.style.background = 'radial-gradient(ellipse at 30% 20%, #a57c5c, #6b4f3a)';
+                this.parentElement.style.borderRadius = '0 0 60px 60px / 0 0 40px 40px';
+                this.parentElement.style.border = '3px solid #4d3524';
+                this.parentElement.style.borderTop = '8px solid #7a5c44';
+            };
+
+            console.log('🌱 باغ عجیب - نسخه بقا!');
+            console.log('💰 سرمایه اولیه: 20 دلار');
+            console.log('🌰 هزینه دونه: 5 دلار (ثابت)');
+            console.log('📈 قیمت فروش: بین 8 تا 17 دلار (متغیر)');
+            console.log('🍽️ گرسنگی: هر ثانیه 0.3 کم میشود');
+            console.log('🥪 غذاها: ساندویچ(+10, 15$), موز(+5, 8$), قهوه(+2, 4$)');
+            console.log('💀 اگر گرسنگی به صفر برسد، میمیرید!');
+        })();
+    </script>
+</body>
+</html>
