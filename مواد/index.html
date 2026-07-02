@@ -106,7 +106,6 @@
             font-weight: bold;
         }
 
-        /* استاتس - گوشه بالا سمت راست */
         .stats-display {
             position: fixed;
             top: 20px;
@@ -188,7 +187,6 @@
             color: #ffd700;
         }
 
-        /* ====== فلوت + مقدار اضافه شده ====== */
         .hunger-float {
             position: fixed;
             z-index: 20;
@@ -204,7 +202,6 @@
             100% { opacity: 0; transform: translateY(-80px) scale(0.6); }
         }
 
-        /* ====== صفحه مرگ ====== */
         .death-overlay {
             position: fixed;
             top: 0;
@@ -269,7 +266,6 @@
             box-shadow: 0 8px 60px rgba(255, 68, 68, 0.5);
         }
 
-        /* ====== دکمه باغ ====== */
         .bazaar-btn {
             position: fixed;
             bottom: 30px;
@@ -294,7 +290,6 @@
             box-shadow: 0 8px 40px rgba(255, 215, 0, 0.5);
         }
 
-        /* ====== ماسک ====== */
         .blur-overlay {
             position: fixed;
             top: 0;
@@ -313,7 +308,6 @@
             pointer-events: auto;
         }
 
-        /* ====== پنل اصلی ====== */
         .menu-panel {
             position: fixed;
             top: 50%;
@@ -340,7 +334,6 @@
             transform: translate(-50%, -50%) scale(1);
         }
 
-        /* ====== تب‌ها ====== */
         .tab-header {
             display: flex;
             border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -397,7 +390,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ====== تب باغ ====== */
         .garden-layout {
             display: flex;
             flex-direction: row;
@@ -545,7 +537,6 @@
             display: block;
         }
 
-        /* ====== تب فروشگاه (با غذاها) ====== */
         .shop-section-title {
             text-align: center;
             color: rgba(255,255,255,0.4);
@@ -639,7 +630,7 @@
             cursor: not-allowed;
         }
 
-        /* ====== غذاها داخل فروشگاه ====== */
+
         .food-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -700,7 +691,6 @@
             content: '❤️ +';
         }
 
-        /* ====== تب بازار سیاه ====== */
         .black-content .sell-title {
             color: #ff4444;
             font-size: 1.4rem;
@@ -856,7 +846,6 @@
             background: rgba(255,255,255,0.15);
         }
 
-        /* ====== نوار پیشرفت ====== */
         .progress-wrapper {
             position: fixed;
             bottom: 160px;
@@ -901,7 +890,6 @@
             letter-spacing: 2px;
         }
 
-        /* ====== responsive ====== */
         @media (max-width: 700px) {
             .garden-layout {
                 flex-direction: column;
@@ -1014,10 +1002,8 @@
 </head>
 <body>
 
-    <!-- عکس پس‌زمینه -->
     <img src="room.png" alt="background" class="bg-image" id="bgImage" />
 
-    <!-- ====== استاتس سمت چپ (گرسنگی) ====== -->
     <div class="left-stats">
         <div class="hunger-container" id="hungerContainer">
             <span class="hunger-icon">🍖</span>
@@ -1031,7 +1017,7 @@
         </div>
     </div>
 
-    <!-- ====== استاتس سمت راست (مواد و پول) ====== -->
+
     <div class="stats-display" id="statsDisplay">
         <div class="stat-item">
             <img src="mavad.png" alt="مواد" class="stat-icon" />
@@ -1054,22 +1040,22 @@
         </div>
     </div>
 
-    <!-- دکمه باغ -->
+
     <button class="bazaar-btn" id="bazaarBtn">🌱 باغ</button>
 
-    <!-- ماسک -->
+
     <div class="blur-overlay" id="blurOverlay"></div>
 
-    <!-- ====== پنل اصلی ====== -->
+
     <div class="menu-panel" id="menuPanel">
-        <!-- تب‌ها -->
+
         <div class="tab-header">
             <button class="tab-btn active" data-tab="garden">🌱 باغ</button>
             <button class="tab-btn" data-tab="shop">🏪 فروشگاه</button>
             <button class="tab-btn black-tab" data-tab="black">🖤 بازار</button>
         </div>
 
-        <!-- تب باغ -->
+
         <div class="tab-content active" id="tabGarden">
             <div class="garden-layout">
                 <div class="panel-left">
@@ -1090,13 +1076,13 @@
             </div>
         </div>
 
-        <!-- تب فروشگاه (با ارتقاها و غذاها) -->
+   
         <div class="tab-content" id="tabShop">
             <div style="text-align:center; margin-bottom:6px;">
                 <span style="color:rgba(255,255,255,0.5); font-size:0.8rem; letter-spacing:2px;">🏪 ارتقا دهید و غذا بخرید</span>
             </div>
             
-            <!-- ارتقاها -->
+
             <div class="shop-section-title">🔧 ارتقاها</div>
             <div class="shop-grid">
                 <div class="shop-card" id="seedShopCard">
@@ -1117,7 +1103,7 @@
                 </div>
             </div>
 
-            <!-- غذاها -->
+  
             <div class="shop-section-title">🍽️ غذاها</div>
             <div class="food-grid">
                 <div class="food-card" data-food="sandwich">
@@ -1144,7 +1130,6 @@
             </div>
         </div>
 
-        <!-- تب بازار سیاه -->
         <div class="tab-content black-content" id="tabBlack">
             <div class="sell-title">🖤 بازار سیاه</div>
             <div class="sell-subtitle">مواد خود را با قیمت لحظه‌ای بفروشید</div>
@@ -1173,7 +1158,7 @@
         </div>
     </div>
 
-    <!-- نوار پیشرفت -->
+
     <div class="progress-wrapper" id="progressWrapper">
         <div class="progress-bar" id="progressBar">
             <div class="progress-fill" id="progressFill"></div>
@@ -1181,7 +1166,7 @@
         <div class="progress-label">🖱️ روی عکس یا نوار کلیک کن تا پر بشه</div>
     </div>
 
-    <!-- صفحه مرگ -->
+
     <div class="death-overlay" id="deathOverlay">
         <div class="death-title">💀 شما مردید!</div>
         <div class="death-sub">گرسنگی شما به صفر رسید...</div>
@@ -1194,7 +1179,7 @@
 
     <script>
         (function() {
-            // ========== عناصر ==========
+
             const bgImage = document.getElementById('bgImage');
             const bazaarBtn = document.getElementById('bazaarBtn');
             const blurOverlay = document.getElementById('blurOverlay');
@@ -1243,14 +1228,12 @@
             const potShopPrice = document.getElementById('potShopPrice');
             const seedShopBtn = document.getElementById('seedShopBtn');
             const potShopBtn = document.getElementById('potShopBtn');
-
-            // عناصر مرگ
+ 
             const deathOverlay = document.getElementById('deathOverlay');
             const deathMaterials = document.getElementById('deathMaterials');
             const deathMoney = document.getElementById('deathMoney');
             const restartBtn = document.getElementById('restartBtn');
 
-            // ========== وضعیت ==========
             const SEED_COST = 5;
 
             let state = {
@@ -1279,7 +1262,6 @@
                 seedUpgradeCost: 20,
                 potUpgradeCost: 20,
 
-                // گرسنگی
                 hunger: 100,
                 maxHunger: 100,
                 isDead: false,
@@ -1289,9 +1271,8 @@
                 priceInterval: null
             };
 
-            // ========== توابع قیمت ==========
+
             function generateNewPrice() {
-                // قیمت بین 8 تا 26
                 return Math.round(8 + Math.random() * 18);
             }
 
@@ -1301,13 +1282,13 @@
                 updateSellTotal();
             }
 
-            // شروع تایمر قیمت (هر 5 ثانیه)
+    
             function startPriceTimer() {
                 if (state.priceInterval) clearInterval(state.priceInterval);
                 state.priceInterval = setInterval(() => {
                     if (!state.isDead) {
                         updatePrice();
-                        // انیمیشن تغییر قیمت
+                
                         currentPrice.style.transform = 'scale(1.3)';
                         currentPrice.style.color = '#ff8800';
                         setTimeout(() => {
@@ -1318,7 +1299,6 @@
                 }, 5000);
             }
 
-            // ========== گرسنگی ==========
             function updateHungerUI() {
                 const percent = (state.hunger / state.maxHunger) * 100;
                 hungerFill.style.width = percent + '%';
@@ -1371,7 +1351,6 @@
                 updateHungerUI();
             }
 
-            // ========== مرگ ==========
             function die() {
                 if (state.isDead) return;
                 state.isDead = true;
@@ -1427,7 +1406,6 @@
                 if (state.menuOpen) toggleMenu(false);
             }
 
-            // ========== به‌روزرسانی UI ==========
             function updateUI() {
                 materialCount.textContent = state.materials;
                 moneyCount.textContent = state.money;
@@ -1513,7 +1491,6 @@
                 }
             }
 
-            // ========== تنظیم گلدون ==========
             function setPotPhase(phase) {
                 state.currentPhase = phase;
                 switch(phase) {
@@ -1540,7 +1517,6 @@
                 setTimeout(() => { potDisplay.style.transform = 'scale(1)'; }, 300);
             }
 
-            // ========== جلوه کلیک ==========
             function potClickEffect(e) {
                 if (state.isDead) return;
                 potDisplay.style.transform = 'scale(1.15) rotate(3deg)';
@@ -1582,7 +1558,6 @@
                 }
             }
 
-            // ========== ریست کامل ==========
             function resetAll() {
                 state.seedPlanted = false;
                 state.watered = false;
@@ -1613,7 +1588,6 @@
                 updatePlantButton();
             }
 
-            // ========== محاسبات ==========
             function getGrowTime() {
                 let time = 30 - (state.potLevel - 1) * 5;
                 return Math.max(time, 15);
@@ -1623,7 +1597,6 @@
                 return state.seedLevel - 1;
             }
 
-            // ========== پیشرفت کلیک ==========
             function handleClickProgress(e) {
                 if (state.isDead) return;
                 if (!state.grown || state.progressComplete || state.harvested) return;
@@ -1703,7 +1676,6 @@
                 }
             }
 
-            // ========== مدیریت تب‌ها ==========
             function switchTab(tabName) {
                 document.querySelectorAll('.tab-content').forEach(el => {
                     el.classList.remove('active');
@@ -1742,7 +1714,6 @@
                 });
             });
 
-            // ========== باز/بستن منو ==========
             function toggleMenu(open) {
                 if (open) {
                     if (state.isDead) return;
@@ -1772,7 +1743,6 @@
                 if (state.menuOpen) toggleMenu(false);
             });
 
-            // ========== کاشت ==========
             plantBtn.addEventListener('click', function() {
                 if (state.isDead) return;
                 if (state.seedPlanted || state.grown) return;
@@ -1797,7 +1767,6 @@
                 updatePlantButton();
             });
 
-            // ========== آب دهی ==========
             waterBtn.addEventListener('click', function() {
                 if (state.isDead) return;
                 if (state.watered || !state.seedPlanted || state.grown) return;
@@ -1842,17 +1811,16 @@
                 }, 1000);
             });
 
-            // ========== کلیک روی نوار پیشرفت ==========
             progressBar.addEventListener('click', function(e) {
                 handleClickProgress(e);
             });
 
-            // ========== کلیک روی گلدون ==========
+
             potDisplay.addEventListener('click', function(e) {
                 handleClickProgress(e);
             });
 
-            // ========== فروش - کنترل تعداد ==========
+
             sellQtyMinus.addEventListener('click', function() {
                 if (state.sellQty > 1) {
                     state.sellQty--;
@@ -1869,7 +1837,6 @@
                 }
             });
 
-            // ========== فروش - تایید ==========
             sellConfirmBtn.addEventListener('click', function() {
                 if (state.isDead) return;
                 if (state.sellQty <= 0 || state.sellQty > state.materials) return;
@@ -1910,7 +1877,6 @@
                 switchTab('garden');
             });
 
-            // ========== خرید غذا ==========
             document.querySelectorAll('.food-card').forEach(card => {
                 card.addEventListener('click', function() {
                     if (state.isDead) return;
@@ -1959,7 +1925,7 @@
                 });
             });
 
-            // ========== ارتقا دونه ==========
+
             seedShopBtn.addEventListener('click', function() {
                 if (state.isDead) return;
                 if (state.seedLevel >= 3) return;
@@ -1984,7 +1950,6 @@
                 alert(`🌰 ارتقا دونه به سطح ${state.seedLevel}!\nهر برداشت +${state.seedLevel - 1} مواد اضافه!`);
             });
 
-            // ========== ارتقا گلدون ==========
             potShopBtn.addEventListener('click', function() {
                 if (state.isDead) return;
                 if (state.potLevel >= 3) return;
@@ -2009,17 +1974,15 @@
                 alert(`🪴 ارتقا گلدون به سطح ${state.potLevel}!\nزمان رشد ${getGrowTime()} ثانیه شد!`);
             });
 
-            // ========== ریستارت ==========
+
             restartBtn.addEventListener('click', function() {
                 restartGame();
             });
 
-            // جلوگیری از بسته شدن با کلیک داخل پنل
-            menuPanel.addEventListener('click', function(e) {
+                menuPanel.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
 
-            // ========== مقداردهی اولیه ==========
             resetAll();
             setPotPhase('goldon');
             state.money = 20;
@@ -2033,7 +1996,6 @@
             startHungerTimer();
             startPriceTimer();
 
-            // خطاگیری عکس‌ها
             bgImage.onerror = function() {
                 this.style.display = 'none';
                 document.querySelector('.bg-image').style.background = 'linear-gradient(145deg, #1a2a3a, #0d1b2a)';
