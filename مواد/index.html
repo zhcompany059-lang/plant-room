@@ -38,7 +38,75 @@
             background: #1a1a2e;
         }
 
-        /* ====== استاتس ====== */
+        /* ====== استاتس و گرسنگی با هم ====== */
+        .left-stats {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 140px;
+        }
+
+        /* نوار گرسنگی - گوشه بالا سمت چپ */
+        .hunger-container {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 68, 68, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        .hunger-container:hover {
+            transform: scale(1.03);
+            border-color: rgba(255, 68, 68, 0.3);
+        }
+        .hunger-container .hunger-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .hunger-container .hunger-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .hunger-container .hunger-info .label {
+            font-size: 0.55rem;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 1px;
+        }
+        .hunger-container .hunger-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+        .hunger-container .hunger-fill {
+            height: 100%;
+            width: 100%;
+            border-radius: 30px;
+            background: linear-gradient(90deg, #44ff44, #88ff44);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+        .hunger-container .hunger-text {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.7rem;
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* استاتس - گوشه بالا سمت راست */
         .stats-display {
             position: fixed;
             top: 20px;
@@ -118,54 +186,6 @@
         }
         .upgrade-level span {
             color: #ffd700;
-        }
-
-        /* ====== نوار گرسنگی ====== */
-        .hunger-container {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50%;
-            max-width: 450px;
-            z-index: 15;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-            border-radius: 60px;
-            padding: 8px 16px 8px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.3s ease;
-        }
-        .hunger-container .hunger-icon {
-            font-size: 1.4rem;
-            flex-shrink: 0;
-        }
-        .hunger-container .hunger-bar-bg {
-            flex: 1;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 30px;
-            overflow: hidden;
-            position: relative;
-        }
-        .hunger-container .hunger-fill {
-            height: 100%;
-            width: 100%;
-            border-radius: 30px;
-            background: linear-gradient(90deg, #ff4444, #ff8800, #44ff44);
-            transition: width 0.3s ease;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
-        }
-        .hunger-container .hunger-text {
-            color: rgba(255,255,255,0.6);
-            font-size: 0.7rem;
-            min-width: 35px;
-            text-align: center;
-            font-weight: bold;
         }
 
         /* ====== فلوت + مقدار اضافه شده ====== */
@@ -525,12 +545,27 @@
             display: block;
         }
 
-        /* ====== تب فروشگاه ====== */
+        /* ====== تب فروشگاه (با غذاها) ====== */
+        .shop-section-title {
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            margin: 8px 0 4px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .shop-section-title:first-of-type {
+            border-top: none;
+            margin-top: 0;
+            padding-top: 0;
+        }
+
         .shop-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 8px;
+            margin-top: 6px;
         }
         .shop-card {
             background: rgba(255,255,255,0.04);
@@ -604,12 +639,12 @@
             cursor: not-allowed;
         }
 
-        /* ====== تب غذا ====== */
+        /* ====== غذاها داخل فروشگاه ====== */
         .food-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin-top: 8px;
+            margin-top: 6px;
         }
         .food-card {
             background: rgba(255,255,255,0.04);
@@ -629,9 +664,14 @@
             transform: scale(0.95);
         }
         .food-card .food-icon {
-            font-size: 2.5rem;
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
             display: block;
-            margin-bottom: 2px;
+            margin: 0 auto 4px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            padding: 4px;
         }
         .food-card .food-name {
             color: #fff;
@@ -708,6 +748,7 @@
             margin-bottom: 12px;
             color: rgba(255,255,255,0.7);
             font-size: 0.85rem;
+            text-align: center;
         }
         .current-price span {
             color: #ffd700;
@@ -716,6 +757,11 @@
         }
         .current-price span::after {
             content: ' $';
+        }
+        .price-timer {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.6rem;
+            margin-top: 4px;
         }
         .sell-controls {
             display: flex;
@@ -761,6 +807,7 @@
             color: rgba(255,255,255,0.7);
             font-size: 0.95rem;
             margin: 8px 0 14px;
+            text-align: center;
         }
         .sell-total span {
             color: #00ff88;
@@ -899,6 +946,22 @@
             .stat-item .stat-info .value {
                 font-size: 1rem;
             }
+            .left-stats {
+                top: 10px;
+                left: 10px;
+                min-width: 100px;
+            }
+            .hunger-container {
+                padding: 8px 12px;
+                border-radius: 12px;
+            }
+            .hunger-container .hunger-icon {
+                font-size: 1rem;
+            }
+            .hunger-container .hunger-text {
+                font-size: 0.6rem;
+                min-width: 25px;
+            }
             .menu-panel {
                 width: 95%;
                 border-radius: 20px;
@@ -917,7 +980,8 @@
                 gap: 8px;
             }
             .food-card .food-icon {
-                font-size: 2rem;
+                width: 36px;
+                height: 36px;
             }
             .food-card .food-name {
                 font-size: 0.75rem;
@@ -930,14 +994,6 @@
             .sell-controls .qty-display {
                 font-size: 1.4rem;
                 min-width: 30px;
-            }
-            .hunger-container {
-                width: 75%;
-                bottom: 80px;
-                padding: 6px 12px 6px 16px;
-            }
-            .hunger-container .hunger-icon {
-                font-size: 1.1rem;
             }
             .death-overlay .death-title {
                 font-size: 2.5rem;
@@ -961,7 +1017,21 @@
     <!-- عکس پس‌زمینه -->
     <img src="room.png" alt="background" class="bg-image" id="bgImage" />
 
-    <!-- استاتس -->
+    <!-- ====== استاتس سمت چپ (گرسنگی) ====== -->
+    <div class="left-stats">
+        <div class="hunger-container" id="hungerContainer">
+            <span class="hunger-icon">🍖</span>
+            <div class="hunger-info">
+                <span class="label">گرسنگی</span>
+                <div class="hunger-bar-bg">
+                    <div class="hunger-fill" id="hungerFill" style="width:100%"></div>
+                </div>
+            </div>
+            <span class="hunger-text" id="hungerText">100</span>
+        </div>
+    </div>
+
+    <!-- ====== استاتس سمت راست (مواد و پول) ====== -->
     <div class="stats-display" id="statsDisplay">
         <div class="stat-item">
             <img src="mavad.png" alt="مواد" class="stat-icon" />
@@ -984,15 +1054,6 @@
         </div>
     </div>
 
-    <!-- نوار گرسنگی -->
-    <div class="hunger-container" id="hungerContainer">
-        <span class="hunger-icon">🍖</span>
-        <div class="hunger-bar-bg">
-            <div class="hunger-fill" id="hungerFill" style="width:100%"></div>
-        </div>
-        <span class="hunger-text" id="hungerText">100</span>
-    </div>
-
     <!-- دکمه باغ -->
     <button class="bazaar-btn" id="bazaarBtn">🌱 باغ</button>
 
@@ -1005,7 +1066,6 @@
         <div class="tab-header">
             <button class="tab-btn active" data-tab="garden">🌱 باغ</button>
             <button class="tab-btn" data-tab="shop">🏪 فروشگاه</button>
-            <button class="tab-btn" data-tab="food">🍽️ غذا</button>
             <button class="tab-btn black-tab" data-tab="black">🖤 بازار</button>
         </div>
 
@@ -1030,11 +1090,14 @@
             </div>
         </div>
 
-        <!-- تب فروشگاه -->
+        <!-- تب فروشگاه (با ارتقاها و غذاها) -->
         <div class="tab-content" id="tabShop">
-            <div style="text-align:center; margin-bottom:10px;">
-                <span style="color:rgba(255,255,255,0.5); font-size:0.8rem; letter-spacing:2px;">🏪 ارتقا دهید و قدرتمندتر شوید</span>
+            <div style="text-align:center; margin-bottom:6px;">
+                <span style="color:rgba(255,255,255,0.5); font-size:0.8rem; letter-spacing:2px;">🏪 ارتقا دهید و غذا بخرید</span>
             </div>
+            
+            <!-- ارتقاها -->
+            <div class="shop-section-title">🔧 ارتقاها</div>
             <div class="shop-grid">
                 <div class="shop-card" id="seedShopCard">
                     <div class="shop-icon">🌰</div>
@@ -1053,30 +1116,26 @@
                     <button class="shop-btn" id="potShopBtn">🔧 ارتقا</button>
                 </div>
             </div>
-        </div>
 
-        <!-- تب غذا -->
-        <div class="tab-content" id="tabFood">
-            <div style="text-align:center; margin-bottom:8px;">
-                <span style="color:rgba(255,255,255,0.5); font-size:0.8rem; letter-spacing:2px;">🍽️ گرسنگی خود را رفع کنید</span>
-            </div>
+            <!-- غذاها -->
+            <div class="shop-section-title">🍽️ غذاها</div>
             <div class="food-grid">
                 <div class="food-card" data-food="sandwich">
-                    <span class="food-icon">🥪</span>
+                    <img src="sandvech.png" alt="ساندویچ" class="food-icon" />
                     <div class="food-name">ساندویچ</div>
                     <div class="food-desc">+۱۰ گرسنگی</div>
                     <div class="food-price">15</div>
                     <div class="food-hunger">10</div>
                 </div>
                 <div class="food-card" data-food="banana">
-                    <span class="food-icon">🍌</span>
+                    <img src="banana.png" alt="موز" class="food-icon" />
                     <div class="food-name">موز</div>
                     <div class="food-desc">+۵ گرسنگی</div>
                     <div class="food-price">8</div>
                     <div class="food-hunger">5</div>
                 </div>
                 <div class="food-card" data-food="coffee">
-                    <span class="food-icon">☕</span>
+                    <img src="cofe.png" alt="قهوه" class="food-icon" />
                     <div class="food-name">قهوه</div>
                     <div class="food-desc">+۲ گرسنگی</div>
                     <div class="food-price">4</div>
@@ -1097,7 +1156,10 @@
                 <span class="label">💵 سرمایه شما</span>
                 <span class="value money" id="sellMoney">20 $</span>
             </div>
-            <div class="current-price">💰 قیمت هر مواد: <span id="currentPrice">10</span> دلار</div>
+            <div class="current-price">
+                💰 قیمت هر مواد: <span id="currentPrice">10</span> دلار
+                <div class="price-timer">⏱️ تغییر قیمت هر ۵ ثانیه</div>
+            </div>
             <div class="sell-controls">
                 <button class="qty-btn" id="sellQtyMinus">−</button>
                 <span class="qty-display" id="sellQtyDisplay">1</span>
@@ -1140,7 +1202,6 @@
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabGarden = document.getElementById('tabGarden');
             const tabShop = document.getElementById('tabShop');
-            const tabFood = document.getElementById('tabFood');
             const tabBlack = document.getElementById('tabBlack');
             
             const potImage = document.getElementById('potImage');
@@ -1210,7 +1271,7 @@
                 sellQty: 1,
                 currentPrice: 10,
                 priceMin: 8,
-                priceMax: 17,
+                priceMax: 26,
                 currentTab: 'garden',
 
                 seedLevel: 1,
@@ -1224,15 +1285,14 @@
                 isDead: false,
                 totalMaterials: 0,
                 totalMoney: 0,
-                hungerInterval: null
+                hungerInterval: null,
+                priceInterval: null
             };
 
             // ========== توابع قیمت ==========
             function generateNewPrice() {
-                const change = (Math.random() - 0.5) * 4;
-                let newPrice = state.currentPrice + change;
-                newPrice = Math.round(Math.max(state.priceMin, Math.min(state.priceMax, newPrice)));
-                return newPrice;
+                // قیمت بین 8 تا 26
+                return Math.round(8 + Math.random() * 18);
             }
 
             function updatePrice() {
@@ -1241,13 +1301,29 @@
                 updateSellTotal();
             }
 
+            // شروع تایمر قیمت (هر 5 ثانیه)
+            function startPriceTimer() {
+                if (state.priceInterval) clearInterval(state.priceInterval);
+                state.priceInterval = setInterval(() => {
+                    if (!state.isDead) {
+                        updatePrice();
+                        // انیمیشن تغییر قیمت
+                        currentPrice.style.transform = 'scale(1.3)';
+                        currentPrice.style.color = '#ff8800';
+                        setTimeout(() => {
+                            currentPrice.style.transform = 'scale(1)';
+                            currentPrice.style.color = '#ffd700';
+                        }, 300);
+                    }
+                }, 5000);
+            }
+
             // ========== گرسنگی ==========
             function updateHungerUI() {
                 const percent = (state.hunger / state.maxHunger) * 100;
                 hungerFill.style.width = percent + '%';
                 hungerText.textContent = Math.round(state.hunger);
 
-                // تغییر رنگ نوار
                 if (percent > 60) {
                     hungerFill.style.background = 'linear-gradient(90deg, #44ff44, #88ff44)';
                 } else if (percent > 30) {
@@ -1257,7 +1333,6 @@
                     hungerFill.style.boxShadow = '0 0 30px rgba(255, 0, 0, 0.3)';
                 }
 
-                // اگر گرسنگی به صفر رسید
                 if (state.hunger <= 0 && !state.isDead) {
                     state.hunger = 0;
                     die();
@@ -1279,7 +1354,7 @@
                 if (state.hungerInterval) clearInterval(state.hungerInterval);
                 state.hungerInterval = setInterval(() => {
                     if (!state.isDead) {
-                        state.hunger = Math.max(0, state.hunger - 0.3);
+                        state.hunger = Math.max(0, state.hunger - 0.15); // کاهش آهسته‌تر
                         updateHungerUI();
                     }
                 }, 1000);
@@ -1308,6 +1383,10 @@
                     clearInterval(state.timerInterval);
                     state.timerInterval = null;
                 }
+                if (state.priceInterval) {
+                    clearInterval(state.priceInterval);
+                    state.priceInterval = null;
+                }
                 deathMaterials.textContent = state.totalMaterials;
                 deathMoney.textContent = state.totalMoney;
                 deathOverlay.classList.add('active');
@@ -1315,7 +1394,6 @@
             }
 
             function restartGame() {
-                // ریست کامل
                 state.isDead = false;
                 state.materials = 0;
                 state.money = 20;
@@ -1344,6 +1422,7 @@
                 updateUI();
                 updateHungerUI();
                 startHungerTimer();
+                startPriceTimer();
 
                 if (state.menuOpen) toggleMenu(false);
             }
@@ -1614,7 +1693,6 @@
                     harvestBtn.style.background = 'rgba(255,215,0,0.3)';
                     harvestBtn.style.borderColor = '#ffd700';
 
-                    // اضافه کردن گرسنگی بعد از برداشت (کمی)
                     addHunger(2);
 
                     setTimeout(() => {
@@ -1647,11 +1725,6 @@
                     state.currentTab = 'shop';
                     progressWrapper.classList.remove('active');
                     updateUI();
-                } else if (tabName === 'food') {
-                    tabFood.classList.add('active');
-                    document.querySelector('.tab-btn[data-tab="food"]').classList.add('active');
-                    state.currentTab = 'food';
-                    progressWrapper.classList.remove('active');
                 } else if (tabName === 'black') {
                     tabBlack.classList.add('active');
                     document.querySelector('.tab-btn[data-tab="black"]').classList.add('active');
@@ -1826,7 +1899,6 @@
                     sellConfirmBtn.style.background = '';
                 }, 1500);
 
-                // اضافه کردن گرسنگی بعد از فروش (کمی)
                 addHunger(1);
 
                 if (state.materials === 0) {
@@ -1874,7 +1946,6 @@
                     addHunger(hungerAdd);
                     updateUI();
 
-                    // انیمیشن خرید
                     this.style.borderColor = 'rgba(68, 255, 68, 0.4)';
                     this.style.background = 'rgba(68, 255, 68, 0.1)';
                     setTimeout(() => {
@@ -1882,7 +1953,6 @@
                         this.style.background = 'rgba(255,255,255,0.04)';
                     }, 600);
 
-                    // بستن منو بعد از خرید
                     setTimeout(() => {
                         toggleMenu(false);
                     }, 300);
@@ -1961,6 +2031,7 @@
             updateUI();
             updateHungerUI();
             startHungerTimer();
+            startPriceTimer();
 
             // خطاگیری عکس‌ها
             bgImage.onerror = function() {
@@ -1976,11 +2047,10 @@
                 this.parentElement.style.borderTop = '8px solid #7a5c44';
             };
 
-            console.log('🌱 باغ عجیب - نسخه بقا!');
+            console.log('🌱 باغ عجیب - نسخه کامل!');
             console.log('💰 سرمایه اولیه: 20 دلار');
-            console.log('🌰 هزینه دونه: 5 دلار (ثابت)');
-            console.log('📈 قیمت فروش: بین 8 تا 17 دلار (متغیر)');
-            console.log('🍽️ گرسنگی: هر ثانیه 0.3 کم میشود');
+            console.log('📈 قیمت فروش: بین 8 تا 26 دلار (هر 5 ثانیه تغییر)');
+            console.log('🍽️ گرسنگی: کاهش آهسته (0.15 در ثانیه)');
             console.log('🥪 غذاها: ساندویچ(+10, 15$), موز(+5, 8$), قهوه(+2, 4$)');
             console.log('💀 اگر گرسنگی به صفر برسد، میمیرید!');
         })();
