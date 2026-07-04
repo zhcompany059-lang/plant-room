@@ -24,19 +24,21 @@
             background-color: #3a0000 !important;
         }
 
+        /* ====== عکس پس‌زمینه - وسط صفحه با سایز مناسب ====== */
         .bg-image {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90vw;
-            height: 90vh;
+            width: 92vw;
+            height: 92vh;
             object-fit: contain;
             z-index: 0;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            border-radius: 24px;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.4);
             background: #1a1a2e;
             transition: all 0.5s ease;
+            border: 2px solid rgba(255,255,255,0.03);
         }
 
         /* ====== استاتس و گرسنگی با هم ====== */
@@ -952,6 +954,7 @@
             .bg-image {
                 width: 95vw;
                 height: 85vh;
+                border-radius: 16px;
             }
             .stats-display {
                 top: 10px;
@@ -1415,7 +1418,7 @@
                 if (state.hungerInterval) clearInterval(state.hungerInterval);
                 state.hungerInterval = setInterval(() => {
                     if (!state.isDead) {
-                        state.hunger = Math.max(0, state.hunger - 0.3); // سریع‌تر
+                        state.hunger = Math.max(0, state.hunger - 0.3);
                         updateHungerUI();
                     }
                 }, 1000);
@@ -1479,7 +1482,6 @@
                 document.body.classList.remove('dead');
                 deathOverlay.classList.remove('active');
                 
-                // ریست عکس خونه
                 bgImage.src = 'room.png';
                 
                 resetAll();
@@ -1556,7 +1558,6 @@
                     return;
                 }
                 
-                // دونه
                 if (state.seedLevel >= 3) {
                     seedShopBtn.textContent = '✅ ماکس';
                     seedShopBtn.className = 'shop-btn maxed';
@@ -1571,7 +1572,6 @@
                     seedShopBtn.className = 'shop-btn';
                 }
 
-                // گلدون
                 if (state.potLevel >= 3) {
                     potShopBtn.textContent = '✅ ماکس';
                     potShopBtn.className = 'shop-btn maxed';
@@ -1586,7 +1586,6 @@
                     potShopBtn.className = 'shop-btn';
                 }
 
-                // خونه
                 if (state.houseLevel >= 4) {
                     houseShopBtn.textContent = '✅ ماکس';
                     houseShopBtn.className = 'shop-btn maxed';
@@ -1674,7 +1673,6 @@
                 const x = ePos.clientX || window.innerWidth/2;
                 const y = ePos.clientY || window.innerHeight/2;
                 
-                // اسپاون ذرات طلایی
                 spawnGoldParticles(x, y);
             }
 
@@ -1755,7 +1753,6 @@
                         potDisplay.style.transform = 'scale(1) rotate(0deg)';
                     }, 600);
 
-                    // اسپاون ذرات طلایی در مرکز
                     spawnGoldParticles(window.innerWidth/2, window.innerHeight/2 - 100);
 
                     harvestBtn.textContent = `✅ +${harvestAmount} مواد!`;
