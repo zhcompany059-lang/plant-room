@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🌱 ساقی محله</title>
     <style>
+        /* ====== تمام استایل‌های قبلی ====== */
         * {
             margin: 0;
             padding: 0;
@@ -27,7 +28,34 @@
             background-color: #3a0000 !important;
         }
 
-        /* ====== عکس پس‌زمینه - دقیقاً وسط ====== */
+        /* حالت شب */
+        body.night-mode .bg-image {
+            filter: brightness(0.4) saturate(0.6);
+            border-color: rgba(100, 150, 255, 0.1);
+            box-shadow: 0 20px 80px rgba(0, 0, 50, 0.8), 0 0 60px rgba(50, 100, 255, 0.1);
+        }
+        body.night-mode .stats-display {
+            border-color: rgba(100, 150, 255, 0.15);
+            background: rgba(0, 0, 30, 0.8);
+        }
+        body.night-mode .hunger-container {
+            border-color: rgba(100, 150, 255, 0.15);
+            background: rgba(0, 0, 30, 0.8);
+        }
+        body.night-mode .menu-panel {
+            border-color: rgba(100, 150, 255, 0.1);
+            background: rgba(0, 0, 30, 0.8);
+        }
+        body.night-mode .bazaar-btn {
+            background: rgba(100, 150, 255, 0.3);
+            border-color: rgba(100, 150, 255, 0.3);
+            box-shadow: 0 8px 30px rgba(100, 150, 255, 0.2);
+        }
+        body.night-mode .bazaar-btn:hover {
+            background: rgba(100, 150, 255, 0.5);
+        }
+
+        /* ====== عکس پس‌زمینه ====== */
         .bg-wrapper {
             position: fixed;
             top: 0;
@@ -49,12 +77,48 @@
             border-radius: 24px;
             box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.4);
             background: #1a1a2e;
-            transition: all 0.5s ease;
+            transition: all 0.8s ease;
             border: 2px solid rgba(255,255,255,0.03);
             pointer-events: none;
         }
 
-        /* ====== استاتس و گرسنگی با هم ====== */
+        /* ====== نشانگر شب/روز (پایین‌تر از نوار) ====== */
+        .daynight-indicator {
+            position: fixed;
+            bottom: 160px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 15;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 6px 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            transition: all 0.5s ease;
+            cursor: default;
+        }
+        .daynight-indicator .icon {
+            font-size: 1.2rem;
+            transition: all 0.5s ease;
+        }
+        .daynight-indicator .time-text {
+            font-weight: 300;
+            letter-spacing: 1px;
+            min-width: 60px;
+            text-align: center;
+        }
+        body.night-mode .daynight-indicator {
+            background: rgba(0, 0, 50, 0.6);
+            border-color: rgba(100, 150, 255, 0.1);
+            color: rgba(150, 200, 255, 0.6);
+        }
+
+        /* ====== استاتس ====== */
         .left-stats {
             position: fixed;
             top: 20px;
@@ -66,7 +130,6 @@
             min-width: 140px;
         }
 
-        /* نوار گرسنگی - گوشه بالا سمت چپ */
         .hunger-container {
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(12px);
@@ -77,7 +140,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
         }
         .hunger-container:hover {
             transform: scale(1.03);
@@ -122,7 +185,6 @@
             font-weight: bold;
         }
 
-        /* استاتس - گوشه بالا سمت راست */
         .stats-display {
             position: fixed;
             top: 20px;
@@ -138,7 +200,7 @@
             flex-direction: column;
             gap: 10px;
             min-width: 130px;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
         }
         .stats-display:hover {
             transform: scale(1.03);
@@ -204,107 +266,7 @@
             color: #ffd700;
         }
 
-        /* ====== فلوت + مقدار اضافه شده ====== */
-        .hunger-float {
-            position: fixed;
-            z-index: 20;
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #44ff44;
-            pointer-events: none;
-            animation: floatUp 1.2s ease-out forwards;
-            text-shadow: 0 0 30px rgba(68, 255, 68, 0.3);
-        }
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-80px) scale(0.6); }
-        }
-
-        /* ====== ذرات طلایی ====== */
-        .gold-particle {
-            position: fixed;
-            pointer-events: none;
-            z-index: 30;
-            border-radius: 50%;
-            animation: goldFloat 1.2s ease-out forwards;
-        }
-        @keyframes goldFloat {
-            0% { 
-                opacity: 1; 
-                transform: translateY(0) scale(1) rotate(0deg);
-            }
-            100% { 
-                opacity: 0; 
-                transform: translateY(-120px) scale(0.2) rotate(360deg);
-            }
-        }
-
-        /* ====== صفحه مرگ ====== */
-        .death-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(30, 0, 0, 0.85);
-            backdrop-filter: blur(16px);
-            z-index: 200;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            animation: deathFade 0.8s ease;
-        }
-        .death-overlay.active {
-            display: flex;
-        }
-        @keyframes deathFade {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .death-overlay .death-title {
-            font-size: 4rem;
-            color: #ff2222;
-            font-weight: 900;
-            letter-spacing: 8px;
-            text-shadow: 0 0 60px rgba(255, 0, 0, 0.5);
-            margin-bottom: 10px;
-        }
-        .death-overlay .death-sub {
-            color: rgba(255,255,255,0.4);
-            font-size: 1rem;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-        }
-        .death-overlay .death-stats {
-            color: rgba(255,255,255,0.6);
-            font-size: 0.9rem;
-            margin-bottom: 25px;
-            text-align: center;
-            line-height: 1.8;
-        }
-        .death-overlay .death-stats span {
-            color: #ffd700;
-        }
-        .death-overlay .restart-btn {
-            padding: 16px 50px;
-            border-radius: 60px;
-            border: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #ff4444, #cc2222);
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 40px rgba(255, 68, 68, 0.3);
-            letter-spacing: 2px;
-        }
-        .death-overlay .restart-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 60px rgba(255, 68, 68, 0.5);
-        }
-
-        /* ====== دکمه باغ ====== */
+        /* ====== دکمه باغ (گوشی 📱 با نوشته "گوشی") ====== */
         .bazaar-btn {
             position: fixed;
             bottom: 30px;
@@ -312,7 +274,7 @@
             background: rgba(255, 215, 0, 0.85);
             backdrop-filter: blur(8px);
             border: 2px solid rgba(255, 215, 0, 0.6);
-            padding: 14px 28px;
+            padding: 14px 24px;
             border-radius: 50px;
             font-size: 1.4rem;
             font-weight: bold;
@@ -321,12 +283,52 @@
             z-index: 100;
             box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
             transition: all 0.3s ease;
-            letter-spacing: 2px;
+            position: fixed;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .bazaar-btn:hover {
             transform: scale(1.05);
             background: rgba(255, 215, 0, 1);
             box-shadow: 0 8px 40px rgba(255, 215, 0, 0.5);
+        }
+        .bazaar-btn .btn-icon {
+            font-size: 1.8rem;
+        }
+        .bazaar-btn .btn-text {
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .bazaar-btn .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff2222;
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: bold;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            padding: 0 4px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        .bazaar-btn .badge.hidden {
+            display: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         /* ====== ماسک ====== */
@@ -375,7 +377,6 @@
             transform: translate(-50%, -50%) scale(1);
         }
 
-        /* ====== تب‌ها ====== */
         .tab-header {
             display: flex;
             border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -407,13 +408,6 @@
         .tab-btn.active {
             color: #fff;
             border-bottom-color: #ffd700;
-        }
-        .tab-btn.black-tab.active {
-            border-bottom-color: #ff4444;
-            color: #ff4444;
-        }
-        .tab-btn.black-tab:hover {
-            color: #ff6666;
         }
 
         .tab-content {
@@ -580,7 +574,7 @@
             display: block;
         }
 
-        /* ====== تب فروشگاه (با غذاها) ====== */
+        /* ====== تب فروشگاه ====== */
         .shop-section-title {
             text-align: center;
             color: rgba(255,255,255,0.4);
@@ -674,7 +668,6 @@
             cursor: not-allowed;
         }
 
-        /* ====== غذاها داخل فروشگاه ====== */
         .food-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -735,166 +728,245 @@
             content: '❤️ +';
         }
 
-        /* ====== تب بازار سیاه ====== */
-        .black-content .sell-title {
-            color: #ff4444;
-            font-size: 1.4rem;
+        /* ====== پیام‌ها ====== */
+        .message-content .msg-title {
+            color: #44ccff;
+            font-size: 1.3rem;
             font-weight: 300;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             margin-bottom: 4px;
-            text-shadow: 0 0 30px rgba(255,68,68,0.2);
+            text-shadow: 0 0 30px rgba(68, 200, 255, 0.2);
         }
-        .black-content .sell-subtitle {
+        .message-content .msg-subtitle {
             color: rgba(255,255,255,0.4);
             font-size: 0.75rem;
             letter-spacing: 2px;
             margin-bottom: 12px;
         }
-        .sell-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.05);
-            border-radius: 14px;
-            padding: 10px 16px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .sell-info .label {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.75rem;
-        }
-        .sell-info .value {
-            color: #fff;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-        .sell-info .value.materials {
-            color: #ffd700;
-        }
-        .sell-info .value.money {
-            color: #00ff88;
-        }
-        .current-price {
-            background: rgba(255,68,68,0.08);
-            border: 1px dashed rgba(255,68,68,0.2);
-            border-radius: 12px;
-            padding: 8px;
+
+        .msg-box {
+            background: rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid rgba(255,255,255,0.06);
             margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+        .msg-box:hover {
+            background: rgba(255,255,255,0.07);
+            border-color: rgba(68, 200, 255, 0.2);
+        }
+        .msg-box .msg-sender {
+            color: #44ccff;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .msg-box .msg-text {
             color: rgba(255,255,255,0.7);
-            font-size: 0.85rem;
-            text-align: center;
+            font-size: 0.9rem;
+            margin: 4px 0;
         }
-        .current-price span {
-            color: #ffd700;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        .current-price span::after {
-            content: ' $';
-        }
-        .price-timer {
-            color: rgba(255,255,255,0.3);
-            font-size: 0.6rem;
+        .msg-box .msg-details {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.75rem;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
             margin-top: 4px;
         }
-        .sell-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin: 10px 0;
+        .msg-box .msg-details span {
+            background: rgba(255,255,255,0.05);
+            padding: 2px 10px;
+            border-radius: 12px;
         }
-        .sell-controls .qty-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: #fff;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .sell-controls .qty-btn:hover {
-            background: rgba(255,68,68,0.15);
-            border-color: rgba(255,68,68,0.3);
-            transform: scale(1.05);
-        }
-        .sell-controls .qty-display {
-            color: #fff;
-            font-size: 1.8rem;
-            font-weight: bold;
-            min-width: 45px;
-            text-align: center;
-            color: #ff4444;
-        }
-        .sell-controls .qty-display::after {
-            content: ' عدد';
-            font-size: 0.65rem;
-            opacity: 0.4;
-            font-weight: normal;
-        }
-        .sell-total {
-            color: rgba(255,255,255,0.7);
-            font-size: 0.95rem;
-            margin: 8px 0 14px;
-            text-align: center;
-        }
-        .sell-total span {
-            color: #00ff88;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        .sell-total span::after {
-            content: ' $';
-            font-size: 0.8rem;
-        }
-        .sell-actions {
+        .msg-box .msg-actions {
             display: flex;
             gap: 10px;
-            justify-content: center;
+            margin-top: 10px;
         }
-        .sell-actions .sell-btn {
-            padding: 10px 28px;
-            border-radius: 60px;
+        .msg-box .msg-actions button {
+            padding: 6px 20px;
+            border-radius: 30px;
             border: none;
-            font-size: 0.85rem;
-            font-weight: bold;
+            font-size: 0.8rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+        }
+        .msg-box .msg-actions .accept {
+            background: linear-gradient(135deg, #44cc44, #22aa22);
+            color: #fff;
+        }
+        .msg-box .msg-actions .accept:hover {
+            transform: scale(1.05);
+        }
+        .msg-box .msg-actions .reject {
+            background: rgba(255,68,68,0.2);
+            color: #ff4444;
+            border: 1px solid rgba(255,68,68,0.3);
+        }
+        .msg-box .msg-actions .reject:hover {
+            background: rgba(255,68,68,0.3);
+        }
+        .msg-box .msg-status {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.7rem;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .no-msg {
+            color: rgba(255,255,255,0.2);
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.9rem;
             letter-spacing: 2px;
         }
-        .sell-actions .sell-btn.sell {
-            background: linear-gradient(135deg, #ff4444, #cc2222);
+
+        /* ====== پنل پست (نارنجی) ====== */
+        .post-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 85%;
+            max-width: 500px;
+            background: linear-gradient(145deg, #ff8c00, #e67600);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 35px 30px;
+            z-index: 80;
+            display: none;
+            box-shadow: 0 30px 80px rgba(255, 140, 0, 0.4);
+            border: 1px solid rgba(255, 200, 100, 0.2);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        }
+        .post-panel.active {
+            display: block;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .post-panel .post-title {
             color: #fff;
-            box-shadow: 0 8px 30px rgba(255,68,68,0.3);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            margin-bottom: 5px;
         }
-        .sell-actions .sell-btn.sell:hover:not(:disabled) {
+        .post-panel .post-sub {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .post-panel .post-field {
+            margin-bottom: 14px;
+            text-align: right;
+        }
+        .post-panel .post-field label {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.8rem;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        .post-panel .post-field input,
+        .post-panel .post-field select {
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .post-panel .post-field input:focus,
+        .post-panel .post-field select:focus {
+            border-color: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.15);
+        }
+        .post-panel .post-field input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+        .post-panel .post-field select option {
+            background: #2a1a0a;
+            color: #fff;
+        }
+
+        .post-panel .post-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .post-panel .post-actions button {
+            padding: 12px 32px;
+            border-radius: 60px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+        .post-panel .post-actions .send-btn {
+            background: #fff;
+            color: #e67600;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+        .post-panel .post-actions .send-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 40px rgba(255,68,68,0.5);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
         }
-        .sell-actions .sell-btn.sell:disabled {
-            opacity: 0.3;
+        .post-panel .post-actions .send-btn:disabled {
+            opacity: 0.4;
             cursor: not-allowed;
             transform: none;
         }
-        .sell-actions .sell-btn.close {
-            background: rgba(255,255,255,0.08);
+        .post-panel .post-actions .close-post {
+            background: rgba(255,255,255,0.1);
             color: rgba(255,255,255,0.6);
             border: 1px solid rgba(255,255,255,0.1);
         }
-        .sell-actions .sell-btn.close:hover {
-            background: rgba(255,255,255,0.15);
+        .post-panel .post-actions .close-post:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .post-panel .post-result {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+        }
+        .post-panel .post-result.success {
+            display: block;
+            background: rgba(0,255,100,0.15);
+            color: #44ff88;
+            border: 1px solid rgba(0,255,100,0.2);
+        }
+        .post-panel .post-result.error {
+            display: block;
+            background: rgba(255,0,0,0.15);
+            color: #ff4444;
+            border: 1px solid rgba(255,0,0,0.2);
+        }
+        .post-panel .post-result.info {
+            display: block;
+            background: rgba(255,200,0,0.15);
+            color: #ffcc44;
+            border: 1px solid rgba(255,200,0,0.2);
         }
 
         /* ====== نوار پیشرفت ====== */
         .progress-wrapper {
             position: fixed;
-            bottom: 160px;
+            bottom: 120px;
             left: 50%;
             transform: translateX(-50%);
             width: 50%;
@@ -936,6 +1008,99 @@
             letter-spacing: 2px;
         }
 
+        /* ====== فلوت ====== */
+        .hunger-float {
+            position: fixed;
+            z-index: 20;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #44ff44;
+            pointer-events: none;
+            animation: floatUp 1.2s ease-out forwards;
+            text-shadow: 0 0 30px rgba(68, 255, 68, 0.3);
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(0.6); }
+        }
+
+        .gold-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 30;
+            border-radius: 50%;
+            animation: goldFloat 1.2s ease-out forwards;
+        }
+        @keyframes goldFloat {
+            0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.2) rotate(360deg); }
+        }
+
+        /* ====== صفحه مرگ ====== */
+        .death-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 0, 0, 0.85);
+            backdrop-filter: blur(16px);
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: deathFade 0.8s ease;
+        }
+        .death-overlay.active {
+            display: flex;
+        }
+        @keyframes deathFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .death-overlay .death-title {
+            font-size: 4rem;
+            color: #ff2222;
+            font-weight: 900;
+            letter-spacing: 8px;
+            text-shadow: 0 0 60px rgba(255, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+        .death-overlay .death-sub {
+            color: rgba(255,255,255,0.4);
+            font-size: 1rem;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+        }
+        .death-overlay .death-stats {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.8;
+        }
+        .death-overlay .death-stats span {
+            color: #ffd700;
+        }
+        .death-overlay .restart-btn {
+            padding: 16px 50px;
+            border-radius: 60px;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff4444, #cc2222);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 40px rgba(255, 68, 68, 0.3);
+            letter-spacing: 2px;
+        }
+        .death-overlay .restart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 60px rgba(255, 68, 68, 0.5);
+        }
+
         /* ====== responsive ====== */
         @media (max-width: 700px) {
             .garden-layout {
@@ -955,14 +1120,28 @@
                 min-width: 50px;
             }
             .bazaar-btn {
-                padding: 10px 18px;
-                font-size: 1rem;
+                padding: 10px 16px;
+                font-size: 1.2rem;
                 bottom: 20px;
                 right: 20px;
+                gap: 6px;
+            }
+            .bazaar-btn .btn-icon {
+                font-size: 1.4rem;
+            }
+            .bazaar-btn .btn-text {
+                font-size: 0.75rem;
+            }
+            .bazaar-btn .badge {
+                font-size: 0.6rem;
+                min-width: 18px;
+                height: 18px;
+                top: -6px;
+                right: -6px;
             }
             .progress-wrapper {
                 width: 75%;
-                bottom: 130px;
+                bottom: 100px;
             }
             .bg-image {
                 width: 95vw;
@@ -1022,20 +1201,30 @@
             .food-card .food-name {
                 font-size: 0.75rem;
             }
-            .sell-controls .qty-btn {
-                width: 34px;
-                height: 34px;
-                font-size: 1.2rem;
+            .post-panel {
+                width: 92%;
+                padding: 25px 20px;
             }
-            .sell-controls .qty-display {
+            .post-panel .post-title {
                 font-size: 1.4rem;
-                min-width: 30px;
+            }
+            .msg-box .msg-details {
+                font-size: 0.65rem;
+                gap: 6px;
             }
             .death-overlay .death-title {
                 font-size: 2.5rem;
             }
             .death-overlay .death-sub {
                 font-size: 0.8rem;
+            }
+            .daynight-indicator {
+                bottom: 130px;
+                font-size: 0.7rem;
+                padding: 4px 12px;
+            }
+            .daynight-indicator .icon {
+                font-size: 1rem;
             }
         }
         @media (max-width: 450px) {
@@ -1050,9 +1239,15 @@
 </head>
 <body>
 
-    <!-- ====== عکس پس‌زمینه - وسط صفحه ====== -->
+    <!-- ====== عکس پس‌زمینه ====== -->
     <div class="bg-wrapper">
         <img src="room.png" alt="background" class="bg-image" id="bgImage" />
+    </div>
+
+    <!-- ====== نشانگر شب/روز (پایین‌تر از نوار) ====== -->
+    <div class="daynight-indicator" id="daynightIndicator">
+        <span class="icon" id="daynightIcon">🌞</span>
+        <span class="time-text" id="daynightText">روز</span>
     </div>
 
     <!-- ====== استاتس سمت چپ (گرسنگی) ====== -->
@@ -1093,19 +1288,22 @@
         </div>
     </div>
 
-    <!-- دکمه باغ -->
-    <button class="bazaar-btn" id="bazaarBtn">🌱 باغ</button>
+    <!-- ====== دکمه باغ (گوشی 📱 با نوشته "گوشی") ====== -->
+    <button class="bazaar-btn" id="bazaarBtn">
+        <span class="btn-icon">📱</span>
+        <span class="btn-text">گوشی</span>
+        <span class="badge hidden" id="msgBadge">0</span>
+    </button>
 
-    <!-- ماسک -->
+    <!-- ====== ماسک ====== -->
     <div class="blur-overlay" id="blurOverlay"></div>
 
     <!-- ====== پنل اصلی ====== -->
     <div class="menu-panel" id="menuPanel">
-        <!-- تب‌ها -->
         <div class="tab-header">
             <button class="tab-btn active" data-tab="garden">🌱 باغ</button>
             <button class="tab-btn" data-tab="shop">🏪 فروشگاه</button>
-            <button class="tab-btn black-tab" data-tab="black">🖤 بازار</button>
+            <button class="tab-btn" data-tab="messages">💬 پیام‌ها</button>
         </div>
 
         <!-- تب باغ -->
@@ -1129,13 +1327,12 @@
             </div>
         </div>
 
-        <!-- تب فروشگاه (با ارتقاها و غذاها) -->
+        <!-- تب فروشگاه -->
         <div class="tab-content" id="tabShop">
             <div style="text-align:center; margin-bottom:6px;">
                 <span style="color:rgba(255,255,255,0.5); font-size:0.8rem; letter-spacing:2px;">🏪 ارتقا دهید و غذا بخرید</span>
             </div>
             
-            <!-- ارتقاها -->
             <div class="shop-section-title">🔧 ارتقاها</div>
             <div class="shop-grid">
                 <div class="shop-card" id="seedShopCard">
@@ -1164,7 +1361,6 @@
                 </div>
             </div>
 
-            <!-- غذاها -->
             <div class="shop-section-title">🍽️ غذاها</div>
             <div class="food-grid">
                 <div class="food-card" data-food="sandwich">
@@ -1191,36 +1387,66 @@
             </div>
         </div>
 
-        <!-- تب بازار سیاه -->
-        <div class="tab-content black-content" id="tabBlack">
-            <div class="sell-title">🖤 بازار سیاه</div>
-            <div class="sell-subtitle">مواد خود را با قیمت لحظه‌ای بفروشید</div>
-            <div class="sell-info">
-                <span class="label">📦 مواد موجود</span>
-                <span class="value materials" id="sellMaterials">0</span>
-            </div>
-            <div class="sell-info">
-                <span class="label">💵 سرمایه شما</span>
-                <span class="value money" id="sellMoney">20 $</span>
-            </div>
-            <div class="current-price">
-                💰 قیمت هر مواد: <span id="currentPrice">10</span> دلار
-                <div class="price-timer">⏱️ تغییر قیمت هر ۵ ثانیه</div>
-            </div>
-            <div class="sell-controls">
-                <button class="qty-btn" id="sellQtyMinus">−</button>
-                <span class="qty-display" id="sellQtyDisplay">1</span>
-                <button class="qty-btn" id="sellQtyPlus">+</button>
-            </div>
-            <div class="sell-total">مبلغ قابل دریافت: <span id="sellTotal">10</span></div>
-            <div class="sell-actions">
-                <button class="sell-btn sell" id="sellConfirmBtn">💰 بفروش</button>
-                <button class="sell-btn close" id="sellCloseBtn">✕ بستن</button>
+        <!-- تب پیام‌ها -->
+        <div class="tab-content message-content" id="tabMessages">
+            <div class="msg-title">💬 پیام‌های دریافتی</div>
+            <div class="msg-subtitle">افراد مختلف از محله‌ها برای شما پیام فرستاده‌اند</div>
+            <div id="messagesContainer">
+                <div class="no-msg">📭 هیچ پیامی ندارید</div>
             </div>
         </div>
     </div>
 
-    <!-- نوار پیشرفت -->
+    <!-- ====== پنل پست (نارنجی) ====== -->
+    <div class="post-panel" id="postPanel">
+        <div class="post-title">📦 پست</div>
+        <div class="post-sub">اطلاعات درخواستی را دقیق وارد کنید</div>
+        
+        <div class="post-field">
+            <label>📦 مقدار مواد (عدد)</label>
+            <input type="number" id="postAmount" placeholder="مثال: 2" min="1" />
+        </div>
+        
+        <div class="post-field">
+            <label>🏘️ محله</label>
+            <select id="postNeighborhood">
+                <option value="">انتخاب کنید...</option>
+                <option value="بلوار طلوع">بلوار طلوع</option>
+                <option value="محله کاج">محله کاج</option>
+                <option value="شهرک باران">شهرک باران</option>
+                <option value="شهرک گلستان">شهرک گلستان</option>
+                <option value="محله ساحل">محله ساحل</option>
+                <option value="محله باغ">محله باغ</option>
+                <option value="شهرک شبنم">شهرک شبنم</option>
+                <option value="شهرک نیلوفر">شهرک نیلوفر</option>
+            </select>
+        </div>
+        
+        <div class="post-field">
+            <label>🛣️ خیابان</label>
+            <select id="postStreet">
+                <option value="">انتخاب کنید...</option>
+                <option value="خیابان لاله">خیابان لاله</option>
+                <option value="خیابان یاس">خیابان یاس</option>
+                <option value="خیابان زیتون">خیابان زیتون</option>
+                <option value="خیابان باران">خیابان باران</option>
+                <option value="خیابان مهر">خیابان مهر</option>
+                <option value="خیابان آفتاب">خیابان آفتاب</option>
+                <option value="خیابان نیلوفر">خیابان نیلوفر</option>
+                <option value="خیابان مهتاب">خیابان مهتاب</option>
+                <option value="خیابان بلوط">خیابان بلوط</option>
+            </select>
+        </div>
+
+        <div class="post-result" id="postResult"></div>
+
+        <div class="post-actions">
+            <button class="send-btn" id="postSendBtn">📤 ارسال</button>
+            <button class="close-post" id="postCloseBtn">✕ بستن</button>
+        </div>
+    </div>
+
+    <!-- ====== نوار پیشرفت ====== -->
     <div class="progress-wrapper" id="progressWrapper">
         <div class="progress-bar" id="progressBar">
             <div class="progress-fill" id="progressFill"></div>
@@ -1228,7 +1454,7 @@
         <div class="progress-label">🖱️ روی عکس یا نوار کلیک کن تا پر بشه</div>
     </div>
 
-    <!-- صفحه مرگ -->
+    <!-- ====== صفحه مرگ ====== -->
     <div class="death-overlay" id="deathOverlay">
         <div class="death-title">💀 شما مردید!</div>
         <div class="death-sub">گرسنگی شما به صفر رسید...</div>
@@ -1244,12 +1470,15 @@
             // ========== عناصر ==========
             const bgImage = document.getElementById('bgImage');
             const bazaarBtn = document.getElementById('bazaarBtn');
+            const msgBadge = document.getElementById('msgBadge');
             const blurOverlay = document.getElementById('blurOverlay');
             const menuPanel = document.getElementById('menuPanel');
+            const postPanel = document.getElementById('postPanel');
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabGarden = document.getElementById('tabGarden');
             const tabShop = document.getElementById('tabShop');
-            const tabBlack = document.getElementById('tabBlack');
+            const tabMessages = document.getElementById('tabMessages');
+            const messagesContainer = document.getElementById('messagesContainer');
             
             const potImage = document.getElementById('potImage');
             const potLabel = document.getElementById('potLabel');
@@ -1269,22 +1498,9 @@
             const potLevelDisplay = document.getElementById('potLevelDisplay');
             const houseLevelDisplay = document.getElementById('houseLevelDisplay');
             
-            const sellMaterials = document.getElementById('sellMaterials');
-            const sellMoney = document.getElementById('sellMoney');
-            const currentPrice = document.getElementById('currentPrice');
-            const sellQtyDisplay = document.getElementById('sellQtyDisplay');
-            const sellTotal = document.getElementById('sellTotal');
-            const sellConfirmBtn = document.getElementById('sellConfirmBtn');
-            const sellCloseBtn = document.getElementById('sellCloseBtn');
-            const sellQtyMinus = document.getElementById('sellQtyMinus');
-            const sellQtyPlus = document.getElementById('sellQtyPlus');
-
-            // عناصر گرسنگی
             const hungerFill = document.getElementById('hungerFill');
             const hungerText = document.getElementById('hungerText');
-            const hungerContainer = document.getElementById('hungerContainer');
 
-            // عناصر فروشگاه
             const seedShopLevel = document.getElementById('seedShopLevel');
             const potShopLevel = document.getElementById('potShopLevel');
             const houseShopLevel = document.getElementById('houseShopLevel');
@@ -1295,14 +1511,28 @@
             const potShopBtn = document.getElementById('potShopBtn');
             const houseShopBtn = document.getElementById('houseShopBtn');
 
-            // عناصر مرگ
             const deathOverlay = document.getElementById('deathOverlay');
             const deathMaterials = document.getElementById('deathMaterials');
             const deathMoney = document.getElementById('deathMoney');
             const restartBtn = document.getElementById('restartBtn');
 
+            // عناصر پست
+            const postAmount = document.getElementById('postAmount');
+            const postNeighborhood = document.getElementById('postNeighborhood');
+            const postStreet = document.getElementById('postStreet');
+            const postSendBtn = document.getElementById('postSendBtn');
+            const postCloseBtn = document.getElementById('postCloseBtn');
+            const postResult = document.getElementById('postResult');
+
+            // عناصر شب/روز
+            const daynightIcon = document.getElementById('daynightIcon');
+            const daynightText = document.getElementById('daynightText');
+
             // ========== وضعیت ==========
             const SEED_COST = 5;
+
+            const NEIGHBORHOODS = ['بلوار طلوع', 'محله کاج', 'شهرک باران', 'شهرک گلستان', 'محله ساحل', 'محله باغ', 'شهرک شبنم', 'شهرک نیلوفر'];
+            const STREETS = ['خیابان لاله', 'خیابان یاس', 'خیابان زیتون', 'خیابان باران', 'خیابان مهر', 'خیابان آفتاب', 'خیابان نیلوفر', 'خیابان مهتاب', 'خیابان بلوط'];
 
             let state = {
                 menuOpen: false,
@@ -1332,15 +1562,363 @@
                 potUpgradeCost: 40,
                 houseUpgradeCost: 50,
 
-                // گرسنگی
                 hunger: 100,
                 maxHunger: 100,
                 isDead: false,
                 totalMaterials: 0,
                 totalMoney: 0,
                 hungerInterval: null,
-                priceInterval: null
+                priceInterval: null,
+
+                messages: [],
+                activeMessage: null,
+                postData: null,
+
+                isNight: false,
+                daynightInterval: null
             };
+
+            // ========== سیستم شب/روز ==========
+            function toggleDayNight() {
+                state.isNight = !state.isNight;
+                if (state.isNight) {
+                    document.body.classList.add('night-mode');
+                    daynightIcon.textContent = '🌙';
+                    daynightText.textContent = 'شب';
+                } else {
+                    document.body.classList.remove('night-mode');
+                    daynightIcon.textContent = '🌞';
+                    daynightText.textContent = 'روز';
+                }
+                saveGame();
+            }
+
+            function startDayNightCycle() {
+                if (state.daynightInterval) clearInterval(state.daynightInterval);
+                state.daynightInterval = setInterval(() => {
+                    if (!state.isDead) {
+                        toggleDayNight();
+                    }
+                }, 60000);
+            }
+
+            // ========== سیستم ذخیره‌سازی ==========
+            function saveGame() {
+                try {
+                    const saveData = {
+                        materials: state.materials,
+                        money: state.money,
+                        seedLevel: state.seedLevel,
+                        potLevel: state.potLevel,
+                        houseLevel: state.houseLevel,
+                        seedUpgradeCost: state.seedUpgradeCost,
+                        potUpgradeCost: state.potUpgradeCost,
+                        houseUpgradeCost: state.houseUpgradeCost,
+                        hunger: state.hunger,
+                        totalMaterials: state.totalMaterials,
+                        totalMoney: state.totalMoney,
+                        isDead: state.isDead,
+                        currentPrice: state.currentPrice,
+                        seedPlanted: state.seedPlanted,
+                        watered: state.watered,
+                        grown: state.grown,
+                        harvested: state.harvested,
+                        clickCount: state.clickCount,
+                        progressComplete: state.progressComplete,
+                        currentPhase: state.currentPhase,
+                        countdown: state.countdown,
+                        currentTab: state.currentTab,
+                        messages: state.messages,
+                        isNight: state.isNight,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('saghiGameSave', JSON.stringify(saveData));
+                } catch(e) {}
+            }
+
+            function loadGame() {
+                try {
+                    const saved = localStorage.getItem('saghiGameSave');
+                    if (!saved) return false;
+                    const data = JSON.parse(saved);
+                    if (typeof data.materials !== 'number') return false;
+                    
+                    state.materials = data.materials || 0;
+                    state.money = data.money || 20;
+                    state.seedLevel = data.seedLevel || 1;
+                    state.potLevel = data.potLevel || 1;
+                    state.houseLevel = data.houseLevel || 1;
+                    state.seedUpgradeCost = data.seedUpgradeCost || 30;
+                    state.potUpgradeCost = data.potUpgradeCost || 40;
+                    state.houseUpgradeCost = data.houseUpgradeCost || 50;
+                    state.hunger = data.hunger || 100;
+                    state.totalMaterials = data.totalMaterials || 0;
+                    state.totalMoney = data.totalMoney || 0;
+                    state.isDead = data.isDead || false;
+                    state.currentPrice = data.currentPrice || 10;
+                    state.seedPlanted = data.seedPlanted || false;
+                    state.watered = data.watered || false;
+                    state.grown = data.grown || false;
+                    state.harvested = data.harvested || false;
+                    state.clickCount = data.clickCount || 0;
+                    state.progressComplete = data.progressComplete || false;
+                    state.currentPhase = data.currentPhase || 'goldon';
+                    state.countdown = data.countdown || 30;
+                    state.currentTab = data.currentTab || 'garden';
+                    state.messages = data.messages || [];
+                    state.isNight = data.isNight || false;
+                    
+                    return true;
+                } catch(e) {
+                    return false;
+                }
+            }
+
+            setInterval(() => { if (!state.isDead) saveGame(); }, 10000);
+            window.addEventListener('beforeunload', function() { if (!state.isDead) saveGame(); });
+
+            // ========== تولید پیام تصادفی ==========
+            function generateMessage() {
+                const senders = ['رضا', 'سارا', 'علی', 'مریم', 'حسین', 'زهرا', 'محمد', 'فاطمه', 'امیر', 'نگین'];
+                const texts = [
+                    'سلام، چند تا مواد داری؟ میخوام بخرم.',
+                    'به مواد نیاز دارم، چندتاشو بهم بده؟',
+                    'اگه مواد داری به من بفروش.',
+                    'سلام، مواد داری؟ قیمت خوب میدم.',
+                    'چند تا مواد داری؟ برام بفرست.',
+                    'به مواد احتیاج دارم، میتونی کمکم کنی؟'
+                ];
+                
+                const amount = Math.floor(Math.random() * 3) + 1;
+                const neighborhood = NEIGHBORHOODS[Math.floor(Math.random() * NEIGHBORHOODS.length)];
+                const street = STREETS[Math.floor(Math.random() * STREETS.length)];
+                const money = Math.floor(Math.random() * 61) + 20;
+                const sender = senders[Math.floor(Math.random() * senders.length)];
+                const text = texts[Math.floor(Math.random() * texts.length)];
+                
+                return {
+                    id: Date.now() + Math.random(),
+                    sender: sender,
+                    text: text,
+                    amount: amount,
+                    neighborhood: neighborhood,
+                    street: street,
+                    money: money,
+                    status: 'pending'
+                };
+            }
+
+            function addNewMessage() {
+                const msg = generateMessage();
+                state.messages.push(msg);
+                updateMessagesUI();
+                updateBadge();
+                saveGame();
+                return msg;
+            }
+
+            // ========== به‌روزرسانی UI پیام‌ها ==========
+            function updateMessagesUI() {
+                const pending = state.messages.filter(m => m.status === 'pending');
+                const done = state.messages.filter(m => m.status === 'done' || m.status === 'rejected');
+                
+                if (pending.length === 0 && done.length === 0) {
+                    messagesContainer.innerHTML = '<div class="no-msg">📭 هیچ پیامی ندارید</div>';
+                    return;
+                }
+
+                let html = '';
+                
+                pending.forEach(msg => {
+                    html += `
+                        <div class="msg-box">
+                            <div class="msg-sender">👤 ${msg.sender}</div>
+                            <div class="msg-text">"${msg.text}"</div>
+                            <div class="msg-details">
+                                <span>📦 ${msg.amount} عدد</span>
+                                <span>🏘️ ${msg.neighborhood}</span>
+                                <span>🛣️ ${msg.street}</span>
+                                <span>💰 ${msg.money} $</span>
+                            </div>
+                            <div class="msg-actions">
+                                <button class="accept" data-msgid="${msg.id}">✅ قبول</button>
+                                <button class="reject" data-msgid="${msg.id}">❌ رد</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                done.forEach(msg => {
+                    const statusText = msg.status === 'done' ? '✅ انجام شده' : '❌ رد شده';
+                    html += `
+                        <div class="msg-box" style="opacity:0.6;">
+                            <div class="msg-sender">👤 ${msg.sender}</div>
+                            <div class="msg-text">"${msg.text}"</div>
+                            <div class="msg-details">
+                                <span>📦 ${msg.amount} عدد</span>
+                                <span>🏘️ ${msg.neighborhood}</span>
+                                <span>🛣️ ${msg.street}</span>
+                                <span>💰 ${msg.money} $</span>
+                            </div>
+                            <div class="msg-status">${statusText}</div>
+                        </div>
+                    `;
+                });
+
+                messagesContainer.innerHTML = html;
+
+                document.querySelectorAll('.msg-actions .accept').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const msgId = parseFloat(this.dataset.msgid);
+                        acceptMessage(msgId);
+                    });
+                });
+                document.querySelectorAll('.msg-actions .reject').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const msgId = parseFloat(this.dataset.msgid);
+                        rejectMessage(msgId);
+                    });
+                });
+            }
+
+            function updateBadge() {
+                const pending = state.messages.filter(m => m.status === 'pending');
+                if (pending.length > 0) {
+                    msgBadge.classList.remove('hidden');
+                    msgBadge.textContent = pending.length;
+                } else {
+                    msgBadge.classList.add('hidden');
+                }
+            }
+
+            // ========== قبول پیام ==========
+            function acceptMessage(msgId) {
+                const msg = state.messages.find(m => m.id === msgId);
+                if (!msg || msg.status !== 'pending') return;
+                
+                state.activeMessage = msg;
+                state.postData = {
+                    amount: msg.amount,
+                    neighborhood: msg.neighborhood,
+                    street: msg.street,
+                    money: msg.money
+                };
+                
+                postPanel.classList.add('active');
+                blurOverlay.classList.add('active');
+                
+                postAmount.value = '';
+                postNeighborhood.value = '';
+                postStreet.value = '';
+                postResult.className = 'post-result';
+                postResult.style.display = 'none';
+                postResult.textContent = '';
+                postSendBtn.disabled = false;
+                
+                postSendBtn.dataset.msgid = msgId;
+            }
+
+            // ========== رد پیام ==========
+            function rejectMessage(msgId) {
+                const msg = state.messages.find(m => m.id === msgId);
+                if (!msg || msg.status !== 'pending') return;
+                
+                msg.status = 'rejected';
+                updateMessagesUI();
+                updateBadge();
+                saveGame();
+            }
+
+            // ========== ارسال پست ==========
+            function sendPost() {
+                const msgId = parseFloat(postSendBtn.dataset.msgid);
+                const msg = state.messages.find(m => m.id === msgId);
+                if (!msg || msg.status !== 'pending') return;
+
+                const amount = parseInt(postAmount.value);
+                const neighborhood = postNeighborhood.value;
+                const street = postStreet.value;
+
+                if (!amount || amount <= 0) {
+                    showPostResult('error', '❌ مقدار مواد را به درستی وارد کنید!');
+                    return;
+                }
+                if (!neighborhood) {
+                    showPostResult('error', '❌ لطفاً محله را انتخاب کنید!');
+                    return;
+                }
+                if (!street) {
+                    showPostResult('error', '❌ لطفاً خیابان را انتخاب کنید!');
+                    return;
+                }
+
+                if (amount === msg.amount && neighborhood === msg.neighborhood && street === msg.street) {
+                    if (state.materials < amount) {
+                        showPostResult('error', `❌ مواد کافی ندارید! شما ${state.materials} عدد مواد دارید.`);
+                        return;
+                    }
+                    
+                    state.materials -= amount;
+                    state.money += msg.money;
+                    msg.status = 'done';
+                    
+                    showPostResult('success', `✅ در حال ارسال...\n📦 ${amount} عدد مواد ارسال شد\n💰 ${msg.money} $ به حساب شما واریز شد`);
+                    postSendBtn.disabled = true;
+                    
+                    updateUI();
+                    updateMessagesUI();
+                    updateBadge();
+                    saveGame();
+                    
+                    const statsDisplay = document.getElementById('statsDisplay');
+                    statsDisplay.style.transform = 'scale(1.05)';
+                    statsDisplay.style.borderColor = 'rgba(0,255,100,0.4)';
+                    setTimeout(() => {
+                        statsDisplay.style.transform = 'scale(1)';
+                        statsDisplay.style.borderColor = 'rgba(255,215,0,0.15)';
+                    }, 400);
+
+                    setTimeout(() => {
+                        closePost();
+                    }, 3000);
+                    
+                } else {
+                    const penalty = Math.min(amount, state.materials);
+                    if (penalty > 0) {
+                        state.materials -= penalty;
+                        showPostResult('error', `❌ محل انتخاب شده اشتباه بود!\n${penalty} عدد مواد از شما کم شد`);
+                    } else {
+                        showPostResult('error', '❌ محل انتخاب شده اشتباه بود!');
+                    }
+                    msg.status = 'rejected';
+                    postSendBtn.disabled = true;
+                    
+                    updateUI();
+                    updateMessagesUI();
+                    updateBadge();
+                    saveGame();
+                    
+                    setTimeout(() => {
+                        closePost();
+                    }, 2500);
+                }
+            }
+
+            function showPostResult(type, text) {
+                postResult.className = 'post-result ' + type;
+                postResult.style.display = 'block';
+                postResult.textContent = text;
+            }
+
+            function closePost() {
+                postPanel.classList.remove('active');
+                blurOverlay.classList.remove('active');
+                state.activeMessage = null;
+                state.postData = null;
+                postResult.className = 'post-result';
+                postResult.style.display = 'none';
+                postSendBtn.disabled = false;
+            }
 
             // ========== توابع قیمت ==========
             function generateNewPrice() {
@@ -1349,8 +1927,6 @@
 
             function updatePrice() {
                 state.currentPrice = generateNewPrice();
-                currentPrice.textContent = state.currentPrice;
-                updateSellTotal();
             }
 
             function startPriceTimer() {
@@ -1358,12 +1934,7 @@
                 state.priceInterval = setInterval(() => {
                     if (!state.isDead) {
                         updatePrice();
-                        currentPrice.style.transform = 'scale(1.3)';
-                        currentPrice.style.color = '#ff8800';
-                        setTimeout(() => {
-                            currentPrice.style.transform = 'scale(1)';
-                            currentPrice.style.color = '#ffd700';
-                        }, 300);
+                        saveGame();
                     }
                 }, 5000);
             }
@@ -1400,7 +1971,6 @@
                 setTimeout(() => { float.remove(); }, 1200);
             }
 
-            // ========== ذرات طلایی ==========
             function spawnGoldParticles(x, y) {
                 const colors = ['#ffd700', '#ffaa00', '#ffcc44', '#ff8800'];
                 for(let i = 0; i < 12; i++) {
@@ -1433,8 +2003,11 @@
                 if (state.hungerInterval) clearInterval(state.hungerInterval);
                 state.hungerInterval = setInterval(() => {
                     if (!state.isDead) {
-                        state.hunger = Math.max(0, state.hunger - 0.3);
+                        state.hunger = Math.max(0, state.hunger - 0.15);
                         updateHungerUI();
+                        if (Math.floor(Date.now() / 5000) % 2 === 0) {
+                            saveGame();
+                        }
                     }
                 }, 1000);
             }
@@ -1448,28 +2021,22 @@
                     showHungerFloat(added);
                 }
                 updateHungerUI();
+                saveGame();
             }
 
             // ========== مرگ ==========
             function die() {
                 if (state.isDead) return;
                 state.isDead = true;
-                if (state.hungerInterval) {
-                    clearInterval(state.hungerInterval);
-                    state.hungerInterval = null;
-                }
-                if (state.timerInterval) {
-                    clearInterval(state.timerInterval);
-                    state.timerInterval = null;
-                }
-                if (state.priceInterval) {
-                    clearInterval(state.priceInterval);
-                    state.priceInterval = null;
-                }
+                if (state.hungerInterval) clearInterval(state.hungerInterval);
+                if (state.timerInterval) clearInterval(state.timerInterval);
+                if (state.priceInterval) clearInterval(state.priceInterval);
+                if (state.daynightInterval) clearInterval(state.daynightInterval);
                 deathMaterials.textContent = state.totalMaterials;
                 deathMoney.textContent = state.totalMoney;
                 deathOverlay.classList.add('active');
                 document.body.classList.add('dead');
+                saveGame();
             }
 
             function restartGame() {
@@ -1493,19 +2060,28 @@
                 state.progressComplete = false;
                 state.currentPhase = 'goldon';
                 state.currentPrice = 10;
+                state.messages = [];
+                state.isNight = false;
 
                 document.body.classList.remove('dead');
+                document.body.classList.remove('night-mode');
                 deathOverlay.classList.remove('active');
                 
                 bgImage.src = 'room.png';
+                daynightIcon.textContent = '🌞';
+                daynightText.textContent = 'روز';
                 
                 resetAll();
                 setPotPhase('goldon');
                 updatePrice();
                 updateUI();
                 updateHungerUI();
+                updateMessagesUI();
+                updateBadge();
                 startHungerTimer();
                 startPriceTimer();
+                startDayNightCycle();
+                saveGame();
 
                 if (state.menuOpen) toggleMenu(false);
             }
@@ -1514,8 +2090,6 @@
             function updateUI() {
                 materialCount.textContent = state.materials;
                 moneyCount.textContent = state.money;
-                sellMaterials.textContent = state.materials;
-                sellMoney.textContent = state.money + ' $';
                 costDisplay.textContent = SEED_COST;
                 
                 seedLevelDisplay.textContent = state.seedLevel;
@@ -1529,19 +2103,12 @@
                 houseShopPrice.textContent = state.houseUpgradeCost;
 
                 updateShopButtons();
-                updateSellTotal();
                 updatePlantButton();
 
                 materialCount.style.transform = 'scale(1.3)';
                 setTimeout(() => { materialCount.style.transform = 'scale(1)'; }, 200);
                 moneyCount.style.transform = 'scale(1.3)';
                 setTimeout(() => { moneyCount.style.transform = 'scale(1)'; }, 200);
-            }
-
-            function updateSellTotal() {
-                const total = state.sellQty * state.currentPrice;
-                sellTotal.textContent = total;
-                sellConfirmBtn.disabled = (state.sellQty > state.materials || state.sellQty <= 0 || state.materials === 0);
             }
 
             function updatePlantButton() {
@@ -1564,12 +2131,9 @@
 
             function updateShopButtons() {
                 if (state.isDead) {
-                    seedShopBtn.disabled = true;
-                    seedShopBtn.textContent = '💀';
-                    potShopBtn.disabled = true;
-                    potShopBtn.textContent = '💀';
-                    houseShopBtn.disabled = true;
-                    houseShopBtn.textContent = '💀';
+                    seedShopBtn.disabled = true; seedShopBtn.textContent = '💀';
+                    potShopBtn.disabled = true; potShopBtn.textContent = '💀';
+                    houseShopBtn.disabled = true; houseShopBtn.textContent = '💀';
                     return;
                 }
                 
@@ -1643,32 +2207,19 @@
                 setTimeout(() => { potDisplay.style.transform = 'scale(1)'; }, 300);
             }
 
-            // ========== تنظیم عکس خونه ==========
             function updateHouseImage() {
                 switch(state.houseLevel) {
-                    case 1:
-                        bgImage.src = 'room.png';
-                        break;
-                    case 2:
-                        bgImage.src = 'roomLvl2.png';
-                        break;
-                    case 3:
-                        bgImage.src = 'roomLvl3.png';
-                        break;
-                    case 4:
-                        bgImage.src = 'roomLvl4.png';
-                        break;
-                    default:
-                        bgImage.src = 'room.png';
+                    case 1: bgImage.src = 'room.png'; break;
+                    case 2: bgImage.src = 'roomLvl2.png'; break;
+                    case 3: bgImage.src = 'roomLvl3.png'; break;
+                    case 4: bgImage.src = 'roomLvl4.png'; break;
+                    default: bgImage.src = 'room.png';
                 }
-                // افکت تغییر
                 bgImage.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    bgImage.style.transform = 'scale(1)';
-                }, 300);
+                setTimeout(() => { bgImage.style.transform = 'scale(1)'; }, 300);
             }
 
-            // ========== جلوه کلیک با ذرات طلایی ==========
+            // ========== جلوه کلیک ==========
             function potClickEffect(e) {
                 if (state.isDead) return;
                 potDisplay.style.transform = 'scale(1.15) rotate(3deg)';
@@ -1687,7 +2238,6 @@
                 const ePos = e || window.event;
                 const x = ePos.clientX || window.innerWidth/2;
                 const y = ePos.clientY || window.innerHeight/2;
-                
                 spawnGoldParticles(x, y);
             }
 
@@ -1776,11 +2326,17 @@
                     harvestBtn.style.borderColor = '#ffd700';
 
                     addHunger(2);
+                    saveGame();
+
+                    setTimeout(() => {
+                        addNewMessage();
+                    }, 3000);
 
                     setTimeout(() => {
                         resetAll();
                         setPotPhase('goldon');
                         updateUI();
+                        saveGame();
                     }, 2500);
                 }
             }
@@ -1807,13 +2363,15 @@
                     state.currentTab = 'shop';
                     progressWrapper.classList.remove('active');
                     updateUI();
-                } else if (tabName === 'black') {
-                    tabBlack.classList.add('active');
-                    document.querySelector('.tab-btn[data-tab="black"]').classList.add('active');
-                    state.currentTab = 'black';
+                } else if (tabName === 'messages') {
+                    tabMessages.classList.add('active');
+                    document.querySelector('.tab-btn[data-tab="messages"]').classList.add('active');
+                    state.currentTab = 'messages';
                     progressWrapper.classList.remove('active');
-                    updateUI();
+                    updateMessagesUI();
+                    updateBadge();
                 }
+                saveGame();
             }
 
             tabButtons.forEach(btn => {
@@ -1836,6 +2394,7 @@
                         progressWrapper.classList.add('active');
                     }
                     updateUI();
+                    updateMessagesUI();
                 } else {
                     blurOverlay.classList.remove('active');
                     menuPanel.classList.remove('active');
@@ -1852,6 +2411,7 @@
 
             blurOverlay.addEventListener('click', function() {
                 if (state.menuOpen) toggleMenu(false);
+                if (postPanel.classList.contains('active')) closePost();
             });
 
             // ========== کاشت ==========
@@ -1877,6 +2437,7 @@
                 }, 600);
 
                 updatePlantButton();
+                saveGame();
             });
 
             // ========== آب دهی ==========
@@ -1898,6 +2459,7 @@
                 timerDisplay.textContent = `⏳ ${growTime} ثانیه صبر کن...`;
                 state.countdown = growTime;
                 state.timerRunning = true;
+                saveGame();
 
                 if (state.timerInterval) clearInterval(state.timerInterval);
                 state.timerInterval = setInterval(() => {
@@ -1920,6 +2482,7 @@
                         harvestBtn.style.display = 'block';
                         harvestBtn.classList.add('disabled');
                         harvestBtn.textContent = '🎁 دریافت مواد';
+                        saveGame();
                     }
                 }, 1000);
             });
@@ -1934,64 +2497,6 @@
                 handleClickProgress(e);
             });
 
-            // ========== فروش - کنترل تعداد ==========
-            sellQtyMinus.addEventListener('click', function() {
-                if (state.sellQty > 1) {
-                    state.sellQty--;
-                    sellQtyDisplay.textContent = state.sellQty;
-                    updateSellTotal();
-                }
-            });
-
-            sellQtyPlus.addEventListener('click', function() {
-                if (state.sellQty < state.materials) {
-                    state.sellQty++;
-                    sellQtyDisplay.textContent = state.sellQty;
-                    updateSellTotal();
-                }
-            });
-
-            // ========== فروش - تایید ==========
-            sellConfirmBtn.addEventListener('click', function() {
-                if (state.isDead) return;
-                if (state.sellQty <= 0 || state.sellQty > state.materials) return;
-
-                const total = state.sellQty * state.currentPrice;
-                state.materials -= state.sellQty;
-                state.money += total;
-                state.totalMoney += total;
-                state.sellQty = 1;
-                sellQtyDisplay.textContent = '1';
-                
-                updatePrice();
-                updateUI();
-
-                const statsDisplay = document.getElementById('statsDisplay');
-                statsDisplay.style.transform = 'scale(1.05)';
-                statsDisplay.style.borderColor = 'rgba(0,255,100,0.4)';
-                setTimeout(() => {
-                    statsDisplay.style.transform = 'scale(1)';
-                    statsDisplay.style.borderColor = 'rgba(255,215,0,0.15)';
-                }, 400);
-
-                sellConfirmBtn.textContent = '✅ فروخته شد!';
-                sellConfirmBtn.style.background = 'rgba(0,255,100,0.2)';
-                setTimeout(() => {
-                    sellConfirmBtn.textContent = '💰 بفروش';
-                    sellConfirmBtn.style.background = '';
-                }, 1500);
-
-                addHunger(1);
-
-                if (state.materials === 0) {
-                    switchTab('garden');
-                }
-            });
-
-            sellCloseBtn.addEventListener('click', function() {
-                switchTab('garden');
-            });
-
             // ========== خرید غذا ==========
             document.querySelectorAll('.food-card').forEach(card => {
                 card.addEventListener('click', function() {
@@ -1999,18 +2504,9 @@
                     const food = this.dataset.food;
                     let price, hungerAdd;
                     switch(food) {
-                        case 'sandwich':
-                            price = 15;
-                            hungerAdd = 10;
-                            break;
-                        case 'banana':
-                            price = 8;
-                            hungerAdd = 5;
-                            break;
-                        case 'coffee':
-                            price = 4;
-                            hungerAdd = 2;
-                            break;
+                        case 'sandwich': price = 15; hungerAdd = 10; break;
+                        case 'banana': price = 8; hungerAdd = 5; break;
+                        case 'coffee': price = 4; hungerAdd = 2; break;
                         default: return;
                     }
 
@@ -2027,6 +2523,7 @@
                     state.money -= price;
                     addHunger(hungerAdd);
                     updateUI();
+                    saveGame();
 
                     this.style.borderColor = 'rgba(68, 255, 68, 0.4)';
                     this.style.background = 'rgba(68, 255, 68, 0.1)';
@@ -2054,6 +2551,7 @@
                 state.seedLevel++;
                 state.seedUpgradeCost = Math.floor(state.seedUpgradeCost * 2);
                 updateUI();
+                saveGame();
                 
                 seedShopBtn.textContent = '✅ ارتقا یافت!';
                 seedShopBtn.style.background = 'rgba(0,255,100,0.2)';
@@ -2079,6 +2577,7 @@
                 state.potLevel++;
                 state.potUpgradeCost = Math.floor(state.potUpgradeCost * 2);
                 updateUI();
+                saveGame();
                 
                 potShopBtn.textContent = '✅ ارتقا یافت!';
                 potShopBtn.style.background = 'rgba(0,255,100,0.2)';
@@ -2105,6 +2604,7 @@
                 state.houseUpgradeCost = Math.floor(state.houseUpgradeCost * 2);
                 updateUI();
                 updateHouseImage();
+                saveGame();
                 
                 houseShopBtn.textContent = '✅ ارتقا یافت!';
                 houseShopBtn.style.background = 'rgba(0,255,100,0.2)';
@@ -2118,33 +2618,120 @@
                 alert(`🏠 ارتقا خونه به ${levelNames[state.houseLevel]}!`);
             });
 
+            // ========== پست ==========
+            postSendBtn.addEventListener('click', sendPost);
+            postCloseBtn.addEventListener('click', closePost);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && postPanel.classList.contains('active')) {
+                    sendPost();
+                }
+                if (e.key === 'Escape') {
+                    if (postPanel.classList.contains('active')) closePost();
+                    if (state.menuOpen) toggleMenu(false);
+                }
+            });
+
             // ========== ریستارت ==========
             restartBtn.addEventListener('click', function() {
                 restartGame();
             });
 
-            // جلوگیری از بسته شدن با کلیک داخل پنل
             menuPanel.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
+            postPanel.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
 
+            // ========== بارگذاری بازی ==========
+            const loaded = loadGame();
+            
             // ========== مقداردهی اولیه ==========
             resetAll();
-            setPotPhase('goldon');
-            state.money = 20;
-            state.currentPrice = 10;
-            state.currentTab = 'garden';
-            state.hunger = 100;
-            state.isDead = false;
-            state.houseLevel = 1;
-            updateHouseImage();
-            updatePrice();
-            updateUI();
-            updateHungerUI();
-            startHungerTimer();
-            startPriceTimer();
+            setPotPhase(state.currentPhase || 'goldon');
+            
+            if (loaded) {
+                updateHouseImage();
+                updatePrice();
+                updateUI();
+                updateHungerUI();
+                updateMessagesUI();
+                updateBadge();
+                
+                if (state.isNight) {
+                    document.body.classList.add('night-mode');
+                    daynightIcon.textContent = '🌙';
+                    daynightText.textContent = 'شب';
+                } else {
+                    document.body.classList.remove('night-mode');
+                    daynightIcon.textContent = '🌞';
+                    daynightText.textContent = 'روز';
+                }
+                
+                if (state.grown && !state.progressComplete) {
+                    progressWrapper.classList.add('active');
+                    progressFill.style.width = (state.clickCount / state.maxClicks * 100) + '%';
+                    harvestBtn.style.display = 'block';
+                    harvestBtn.classList.add('disabled');
+                    harvestBtn.textContent = '🎁 دریافت مواد';
+                }
+                
+                if (state.seedPlanted && !state.watered && !state.grown) {
+                    plantBtn.classList.add('disabled');
+                    waterBtn.classList.remove('disabled');
+                }
+                
+                if (state.watered && !state.grown) {
+                    plantBtn.classList.add('disabled');
+                    waterBtn.classList.add('disabled');
+                    timerDisplay.classList.add('show');
+                    timerDisplay.textContent = `⏳ ${state.countdown} ثانیه صبر کن...`;
+                    if (state.timerInterval) clearInterval(state.timerInterval);
+                    state.timerInterval = setInterval(() => {
+                        state.countdown--;
+                        timerDisplay.textContent = `⏳ ${state.countdown} ثانیه صبر کن...`;
+                        if (state.countdown <= 0) {
+                            clearInterval(state.timerInterval);
+                            state.timerInterval = null;
+                            state.timerRunning = false;
+                            timerDisplay.classList.remove('show');
+                            state.grown = true;
+                            setPotPhase('gl_v_goldon');
+                            progressWrapper.classList.add('active');
+                            state.clickCount = 0;
+                            progressFill.style.width = '0%';
+                            progressFill.style.background = 'linear-gradient(90deg, #ffd700, #ffaa00, #ff8800)';
+                            state.progressComplete = false;
+                            harvestBtn.style.display = 'block';
+                            harvestBtn.classList.add('disabled');
+                            harvestBtn.textContent = '🎁 دریافت مواد';
+                            saveGame();
+                        }
+                    }, 1000);
+                }
+                
+                if (state.isDead) {
+                    die();
+                }
+            } else {
+                setTimeout(() => {
+                    addNewMessage();
+                    setTimeout(() => addNewMessage(), 5000);
+                }, 2000);
+            }
+            
+            if (!state.isDead) {
+                startHungerTimer();
+                startPriceTimer();
+                startDayNightCycle();
+            }
 
-            // خطاگیری عکس‌ها
+            console.log('🌱 ساقی محله - نسخه نهایی!');
+            console.log('📱 دکمه گوشی در گوشه پایین سمت راست با نوشته "گوشی"');
+            console.log('🌙 نشانگر شب/روز زیر نوار پیشرفت');
+
+            // ====== خطاگیری عکس‌ها ======
             bgImage.onerror = function() {
                 this.style.display = 'none';
                 document.querySelector('.bg-wrapper').style.background = 'linear-gradient(145deg, #1a2a3a, #0d1b2a)';
@@ -2158,14 +2745,6 @@
                 this.parentElement.style.border = '3px solid #4d3524';
                 this.parentElement.style.borderTop = '8px solid #7a5c44';
             };
-
-            console.log('🌱 ساقی محله - نسخه کامل!');
-            console.log('💰 سرمایه اولیه: 20 دلار');
-            console.log('📈 قیمت فروش: بین 8 تا 26 دلار (هر 5 ثانیه تغییر)');
-            console.log('🍽️ گرسنگی: کاهش سریع (0.3 در ثانیه)');
-            console.log('🥪 غذاها: ساندویچ(+10, 15$), موز(+5, 8$), قهوه(+2, 4$)');
-            console.log('🏠 ارتقا خونه: room.png → roomLvl2.png → roomLvl3.png → roomLvl4.png');
-            console.log('💀 اگر گرسنگی به صفر برسد، میمیرید!');
         })();
     </script>
 </body>
