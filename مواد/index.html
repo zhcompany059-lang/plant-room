@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🌱 ساقی محله</title>
     <style>
-        /* ====== تمام استایل‌های قبلی ====== */
         * {
             margin: 0;
             padding: 0;
@@ -28,7 +27,6 @@
             background-color: #3a0000 !important;
         }
 
-        /* حالت شب */
         body.night-mode .bg-image {
             filter: brightness(0.4) saturate(0.6);
             border-color: rgba(100, 150, 255, 0.1);
@@ -55,7 +53,6 @@
             background: rgba(100, 150, 255, 0.5);
         }
 
-        /* ====== عکس پس‌زمینه ====== */
         .bg-wrapper {
             position: fixed;
             top: 0;
@@ -82,7 +79,6 @@
             pointer-events: none;
         }
 
-        /* ====== نشانگر شب/روز (پایین‌تر از نوار) ====== */
         .daynight-indicator {
             position: fixed;
             bottom: 160px;
@@ -118,7 +114,6 @@
             color: rgba(150, 200, 255, 0.6);
         }
 
-        /* ====== استاتس ====== */
         .left-stats {
             position: fixed;
             top: 20px;
@@ -266,7 +261,6 @@
             color: #ffd700;
         }
 
-        /* ====== دکمه باغ (گوشی 📱 با نوشته "گوشی") ====== */
         .bazaar-btn {
             position: fixed;
             bottom: 30px;
@@ -331,7 +325,6 @@
             100% { transform: scale(1); }
         }
 
-        /* ====== ماسک ====== */
         .blur-overlay {
             position: fixed;
             top: 0;
@@ -350,7 +343,6 @@
             pointer-events: auto;
         }
 
-        /* ====== پنل اصلی ====== */
         .menu-panel {
             position: fixed;
             top: 50%;
@@ -426,7 +418,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ====== تب باغ ====== */
         .garden-layout {
             display: flex;
             flex-direction: row;
@@ -574,7 +565,6 @@
             display: block;
         }
 
-        /* ====== تب فروشگاه ====== */
         .shop-section-title {
             text-align: center;
             color: rgba(255,255,255,0.4);
@@ -728,7 +718,6 @@
             content: '❤️ +';
         }
 
-        /* ====== پیام‌ها ====== */
         .message-content .msg-title {
             color: #44ccff;
             font-size: 1.3rem;
@@ -823,7 +812,6 @@
             letter-spacing: 2px;
         }
 
-        /* ====== پنل پست (نارنجی) ====== */
         .post-panel {
             position: fixed;
             top: 50%;
@@ -963,7 +951,6 @@
             border: 1px solid rgba(255,200,0,0.2);
         }
 
-        /* ====== نوار پیشرفت ====== */
         .progress-wrapper {
             position: fixed;
             bottom: 120px;
@@ -1008,7 +995,6 @@
             letter-spacing: 2px;
         }
 
-        /* ====== فلوت ====== */
         .hunger-float {
             position: fixed;
             z-index: 20;
@@ -1036,7 +1022,6 @@
             100% { opacity: 0; transform: translateY(-120px) scale(0.2) rotate(360deg); }
         }
 
-        /* ====== صفحه مرگ ====== */
         .death-overlay {
             position: fixed;
             top: 0;
@@ -1101,7 +1086,6 @@
             box-shadow: 0 8px 60px rgba(255, 68, 68, 0.5);
         }
 
-        /* ====== responsive ====== */
         @media (max-width: 700px) {
             .garden-layout {
                 flex-direction: column;
@@ -1239,18 +1223,15 @@
 </head>
 <body>
 
-    <!-- ====== عکس پس‌زمینه ====== -->
     <div class="bg-wrapper">
         <img src="room.png" alt="background" class="bg-image" id="bgImage" />
     </div>
 
-    <!-- ====== نشانگر شب/روز (پایین‌تر از نوار) ====== -->
     <div class="daynight-indicator" id="daynightIndicator">
         <span class="icon" id="daynightIcon">🌞</span>
         <span class="time-text" id="daynightText">روز</span>
     </div>
 
-    <!-- ====== استاتس سمت چپ (گرسنگی) ====== -->
     <div class="left-stats">
         <div class="hunger-container" id="hungerContainer">
             <span class="hunger-icon">🍖</span>
@@ -1264,7 +1245,6 @@
         </div>
     </div>
 
-    <!-- ====== استاتس سمت راست (مواد و پول) ====== -->
     <div class="stats-display" id="statsDisplay">
         <div class="stat-item">
             <img src="mavad.png" alt="مواد" class="stat-icon" />
@@ -1288,17 +1268,14 @@
         </div>
     </div>
 
-    <!-- ====== دکمه باغ (گوشی 📱 با نوشته "گوشی") ====== -->
     <button class="bazaar-btn" id="bazaarBtn">
         <span class="btn-icon">📱</span>
         <span class="btn-text">گوشی</span>
         <span class="badge hidden" id="msgBadge">0</span>
     </button>
 
-    <!-- ====== ماسک ====== -->
     <div class="blur-overlay" id="blurOverlay"></div>
 
-    <!-- ====== پنل اصلی ====== -->
     <div class="menu-panel" id="menuPanel">
         <div class="tab-header">
             <button class="tab-btn active" data-tab="garden">🌱 باغ</button>
@@ -1306,7 +1283,6 @@
             <button class="tab-btn" data-tab="messages">💬 پیام‌ها</button>
         </div>
 
-        <!-- تب باغ -->
         <div class="tab-content active" id="tabGarden">
             <div class="garden-layout">
                 <div class="panel-left">
@@ -1327,7 +1303,6 @@
             </div>
         </div>
 
-        <!-- تب فروشگاه -->
         <div class="tab-content" id="tabShop">
             <div style="text-align:center; margin-bottom:6px;">
                 <span style="color:rgba(255,255,255,0.5); font-size:0.8rem; letter-spacing:2px;">🏪 ارتقا دهید و غذا بخرید</span>
@@ -1387,7 +1362,6 @@
             </div>
         </div>
 
-        <!-- تب پیام‌ها -->
         <div class="tab-content message-content" id="tabMessages">
             <div class="msg-title">💬 پیام‌های دریافتی</div>
             <div class="msg-subtitle">افراد مختلف از محله‌ها برای شما پیام فرستاده‌اند</div>
@@ -1397,7 +1371,6 @@
         </div>
     </div>
 
-    <!-- ====== پنل پست (نارنجی) ====== -->
     <div class="post-panel" id="postPanel">
         <div class="post-title">📦 پست</div>
         <div class="post-sub">اطلاعات درخواستی را دقیق وارد کنید</div>
@@ -1446,7 +1419,6 @@
         </div>
     </div>
 
-    <!-- ====== نوار پیشرفت ====== -->
     <div class="progress-wrapper" id="progressWrapper">
         <div class="progress-bar" id="progressBar">
             <div class="progress-fill" id="progressFill"></div>
@@ -1454,7 +1426,6 @@
         <div class="progress-label">🖱️ روی عکس یا نوار کلیک کن تا پر بشه</div>
     </div>
 
-    <!-- ====== صفحه مرگ ====== -->
     <div class="death-overlay" id="deathOverlay">
         <div class="death-title">💀 شما مردید!</div>
         <div class="death-sub">گرسنگی شما به صفر رسید...</div>
@@ -1467,7 +1438,6 @@
 
     <script>
         (function() {
-            // ========== عناصر ==========
             const bgImage = document.getElementById('bgImage');
             const bazaarBtn = document.getElementById('bazaarBtn');
             const msgBadge = document.getElementById('msgBadge');
@@ -1516,7 +1486,6 @@
             const deathMoney = document.getElementById('deathMoney');
             const restartBtn = document.getElementById('restartBtn');
 
-            // عناصر پست
             const postAmount = document.getElementById('postAmount');
             const postNeighborhood = document.getElementById('postNeighborhood');
             const postStreet = document.getElementById('postStreet');
@@ -1524,11 +1493,9 @@
             const postCloseBtn = document.getElementById('postCloseBtn');
             const postResult = document.getElementById('postResult');
 
-            // عناصر شب/روز
             const daynightIcon = document.getElementById('daynightIcon');
             const daynightText = document.getElementById('daynightText');
 
-            // ========== وضعیت ==========
             const SEED_COST = 5;
 
             const NEIGHBORHOODS = ['بلوار طلوع', 'محله کاج', 'شهرک باران', 'شهرک گلستان', 'محله ساحل', 'محله باغ', 'شهرک شبنم', 'شهرک نیلوفر'];
@@ -1578,7 +1545,6 @@
                 daynightInterval: null
             };
 
-            // ========== سیستم شب/روز ==========
             function toggleDayNight() {
                 state.isNight = !state.isNight;
                 if (state.isNight) {
@@ -1602,7 +1568,6 @@
                 }, 60000);
             }
 
-            // ========== سیستم ذخیره‌سازی ==========
             function saveGame() {
                 try {
                     const saveData = {
@@ -1677,7 +1642,6 @@
             setInterval(() => { if (!state.isDead) saveGame(); }, 10000);
             window.addEventListener('beforeunload', function() { if (!state.isDead) saveGame(); });
 
-            // ========== تولید پیام تصادفی ==========
             function generateMessage() {
                 const senders = ['رضا', 'سارا', 'علی', 'مریم', 'حسین', 'زهرا', 'محمد', 'فاطمه', 'امیر', 'نگین'];
                 const texts = [
@@ -1717,7 +1681,6 @@
                 return msg;
             }
 
-            // ========== به‌روزرسانی UI پیام‌ها ==========
             function updateMessagesUI() {
                 const pending = state.messages.filter(m => m.status === 'pending');
                 const done = state.messages.filter(m => m.status === 'done' || m.status === 'rejected');
@@ -1791,7 +1754,6 @@
                 }
             }
 
-            // ========== قبول پیام ==========
             function acceptMessage(msgId) {
                 const msg = state.messages.find(m => m.id === msgId);
                 if (!msg || msg.status !== 'pending') return;
@@ -1818,7 +1780,6 @@
                 postSendBtn.dataset.msgid = msgId;
             }
 
-            // ========== رد پیام ==========
             function rejectMessage(msgId) {
                 const msg = state.messages.find(m => m.id === msgId);
                 if (!msg || msg.status !== 'pending') return;
@@ -1829,7 +1790,6 @@
                 saveGame();
             }
 
-            // ========== ارسال پست ==========
             function sendPost() {
                 const msgId = parseFloat(postSendBtn.dataset.msgid);
                 const msg = state.messages.find(m => m.id === msgId);
@@ -1920,7 +1880,6 @@
                 postSendBtn.disabled = false;
             }
 
-            // ========== توابع قیمت ==========
             function generateNewPrice() {
                 return Math.round(8 + Math.random() * 18);
             }
@@ -1939,7 +1898,6 @@
                 }, 5000);
             }
 
-            // ========== گرسنگی ==========
             function updateHungerUI() {
                 const percent = (state.hunger / state.maxHunger) * 100;
                 hungerFill.style.width = percent + '%';
@@ -2024,7 +1982,6 @@
                 saveGame();
             }
 
-            // ========== مرگ ==========
             function die() {
                 if (state.isDead) return;
                 state.isDead = true;
@@ -2086,7 +2043,6 @@
                 if (state.menuOpen) toggleMenu(false);
             }
 
-            // ========== به‌روزرسانی UI ==========
             function updateUI() {
                 materialCount.textContent = state.materials;
                 moneyCount.textContent = state.money;
@@ -2180,7 +2136,6 @@
                 }
             }
 
-            // ========== تنظیم گلدون ==========
             function setPotPhase(phase) {
                 state.currentPhase = phase;
                 switch(phase) {
@@ -2219,7 +2174,6 @@
                 setTimeout(() => { bgImage.style.transform = 'scale(1)'; }, 300);
             }
 
-            // ========== جلوه کلیک ==========
             function potClickEffect(e) {
                 if (state.isDead) return;
                 potDisplay.style.transform = 'scale(1.15) rotate(3deg)';
@@ -2241,7 +2195,6 @@
                 spawnGoldParticles(x, y);
             }
 
-            // ========== ریست کامل ==========
             function resetAll() {
                 state.seedPlanted = false;
                 state.watered = false;
@@ -2272,7 +2225,6 @@
                 updatePlantButton();
             }
 
-            // ========== محاسبات ==========
             function getGrowTime() {
                 let time = 30 - (state.potLevel - 1) * 5;
                 return Math.max(time, 15);
@@ -2282,7 +2234,6 @@
                 return state.seedLevel - 1;
             }
 
-            // ========== پیشرفت کلیک ==========
             function handleClickProgress(e) {
                 if (state.isDead) return;
                 if (!state.grown || state.progressComplete || state.harvested) return;
@@ -2341,7 +2292,6 @@
                 }
             }
 
-            // ========== مدیریت تب‌ها ==========
             function switchTab(tabName) {
                 document.querySelectorAll('.tab-content').forEach(el => {
                     el.classList.remove('active');
@@ -2382,7 +2332,6 @@
                 });
             });
 
-            // ========== باز/بستن منو ==========
             function toggleMenu(open) {
                 if (open) {
                     if (state.isDead) return;
@@ -2414,7 +2363,6 @@
                 if (postPanel.classList.contains('active')) closePost();
             });
 
-            // ========== کاشت ==========
             plantBtn.addEventListener('click', function() {
                 if (state.isDead) return;
                 if (state.seedPlanted || state.grown) return;
@@ -2440,7 +2388,6 @@
                 saveGame();
             });
 
-            // ========== آب دهی ==========
             waterBtn.addEventListener('click', function() {
                 if (state.isDead) return;
                 if (state.watered || !state.seedPlanted || state.grown) return;
@@ -2487,17 +2434,14 @@
                 }, 1000);
             });
 
-            // ========== کلیک روی نوار پیشرفت ==========
             progressBar.addEventListener('click', function(e) {
                 handleClickProgress(e);
             });
 
-            // ========== کلیک روی گلدون ==========
             potDisplay.addEventListener('click', function(e) {
                 handleClickProgress(e);
             });
 
-            // ========== خرید غذا ==========
             document.querySelectorAll('.food-card').forEach(card => {
                 card.addEventListener('click', function() {
                     if (state.isDead) return;
@@ -2538,7 +2482,6 @@
                 });
             });
 
-            // ========== ارتقا دونه ==========
             seedShopBtn.addEventListener('click', function() {
                 if (state.isDead) return;
                 if (state.seedLevel >= 3) return;
@@ -2564,7 +2507,6 @@
                 alert(`🌰 ارتقا دونه به سطح ${state.seedLevel}!\nهر برداشت +${state.seedLevel - 1} مواد اضافه!`);
             });
 
-            // ========== ارتقا گلدون ==========
             potShopBtn.addEventListener('click', function() {
                 if (state.isDead) return;
                 if (state.potLevel >= 3) return;
@@ -2590,7 +2532,6 @@
                 alert(`🪴 ارتقا گلدون به سطح ${state.potLevel}!\nزمان رشد ${getGrowTime()} ثانیه شد!`);
             });
 
-            // ========== ارتقا خونه ==========
             houseShopBtn.addEventListener('click', function() {
                 if (state.isDead) return;
                 if (state.houseLevel >= 4) return;
@@ -2618,7 +2559,6 @@
                 alert(`🏠 ارتقا خونه به ${levelNames[state.houseLevel]}!`);
             });
 
-            // ========== پست ==========
             postSendBtn.addEventListener('click', sendPost);
             postCloseBtn.addEventListener('click', closePost);
 
@@ -2632,7 +2572,6 @@
                 }
             });
 
-            // ========== ریستارت ==========
             restartBtn.addEventListener('click', function() {
                 restartGame();
             });
@@ -2644,10 +2583,8 @@
                 e.stopPropagation();
             });
 
-            // ========== بارگذاری بازی ==========
             const loaded = loadGame();
             
-            // ========== مقداردهی اولیه ==========
             resetAll();
             setPotPhase(state.currentPhase || 'goldon');
             
@@ -2731,7 +2668,6 @@
             console.log('📱 دکمه گوشی در گوشه پایین سمت راست با نوشته "گوشی"');
             console.log('🌙 نشانگر شب/روز زیر نوار پیشرفت');
 
-            // ====== خطاگیری عکس‌ها ======
             bgImage.onerror = function() {
                 this.style.display = 'none';
                 document.querySelector('.bg-wrapper').style.background = 'linear-gradient(145deg, #1a2a3a, #0d1b2a)';
