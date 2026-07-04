@@ -19,26 +19,39 @@
             background: #0a0a0a;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             transition: background-color 0.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         body.dead {
             background-color: #3a0000 !important;
         }
 
-        /* ====== عکس پس‌زمینه - وسط صفحه با سایز مناسب ====== */
-        .bg-image {
+        /* ====== عکس پس‌زمینه - دقیقاً وسط ====== */
+        .bg-wrapper {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 92vw;
-            height: 92vh;
-            object-fit: contain;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 0;
+            pointer-events: none;
+        }
+        .bg-image {
+            width: 90vw;
+            height: 90vh;
+            max-width: 1200px;
+            max-height: 900px;
+            object-fit: contain;
             border-radius: 24px;
             box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.4);
             background: #1a1a2e;
             transition: all 0.5s ease;
             border: 2px solid rgba(255,255,255,0.03);
+            pointer-events: none;
         }
 
         /* ====== استاتس و گرسنگی با هم ====== */
@@ -1037,8 +1050,10 @@
 </head>
 <body>
 
-    <!-- عکس پس‌زمینه -->
-    <img src="room.png" alt="background" class="bg-image" id="bgImage" />
+    <!-- ====== عکس پس‌زمینه - وسط صفحه ====== -->
+    <div class="bg-wrapper">
+        <img src="room.png" alt="background" class="bg-image" id="bgImage" />
+    </div>
 
     <!-- ====== استاتس سمت چپ (گرسنگی) ====== -->
     <div class="left-stats">
@@ -2132,7 +2147,8 @@
             // خطاگیری عکس‌ها
             bgImage.onerror = function() {
                 this.style.display = 'none';
-                document.querySelector('.bg-image').style.background = 'linear-gradient(145deg, #1a2a3a, #0d1b2a)';
+                document.querySelector('.bg-wrapper').style.background = 'linear-gradient(145deg, #1a2a3a, #0d1b2a)';
+                document.querySelector('.bg-wrapper').style.borderRadius = '24px';
             };
 
             potImage.onerror = function() {
